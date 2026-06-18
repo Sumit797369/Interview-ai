@@ -1,80 +1,294 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import { LiaRobotSolid } from "react-icons/lia";
-import { IoSparklesSharp } from "react-icons/io5";
 import { FcGoogle } from "react-icons/fc";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { motion } from "motion/react";
-import { toast } from 'react-toastify';
-import { auth, provider } from '../../firebase';
-import axios from 'axios';
-import { signInWithPopup } from 'firebase/auth';
+import { toast } from "react-toastify";
+
+import { auth, provider } from "../../firebase";
+
+import {
+  signInWithPopup,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
 
 const Auth = () => {
-    const [errorMsg, setErrorMsg] = useState("");
+  const [isLogin, setIsLogin] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
 
-    const handleGoogleAuth = async () => {
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleAuth = async (e) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+      setErrorMsg("");
+
+      if (isLogin) {
+        // LOGIN
+        const result = await signInWithEmailAndPassword(
+          auth,
+          formData.email,
+          formData.password
+        );
+
+        console.log(result.user);
+
+        toast.success(
+          `Welcome back ${
+            result.user.displayName || result.user.email
+          }`
+        );
+      } else {
+        // SIGNUP
+        const result = await createUserWithEmailAndPassword(
+          auth,
+          formData.email,
+          formData.password
+        );
+
+        // Username Firebase profile mein save hoga
+        await updateProfile(result.user, {
+          displayName: formData.username,
+        });
+
+        console.log(result.user);
+
+        toast.success("Account Created Successfully!");
+
+        // Signup ke baad login mode pe le jao
+        setIsLogin(true);
+
+        setFormData({
+          username: "",
+          email: "",
+          password: "",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+
+      let message = "Something went wrong";
+
+      switch (error.code) {
+        case "auth/email-already-in-use":
+          message = "Email already exists";
+          break;
+
+        case "auth/invalid-email":
+          message = "Invalid email address";
+          break;
+
+        case "auth/weak-password":
+          message = "Password should be at least 6 characters";
+          break;
+
+        case "auth/invalid-credential":
+          message = "Invalid email or password";
+          break;
+
+        case "auth/user-not-found":
+          message = "User not found";
+          break;
+
+        case "auth/wrong-password":
+          message = "Incorrect password";
+          break;
+
+        default:
+          message = error.message;
+      }
+
+      setErrorMsg(message);
+      toast.error(message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleAuth = async () => {
     try {
       setErrorMsg("");
 
       const result = await signInWithPopup(auth, provider);
-console.log(result);
 
-    //   await axios.post(
-    //     `${serverUrl}/api/auth/google`,
-    //     {
-    //       name: result.user.displayName,
-    //       email: result.user.email,
-    //       avatar: result.user.photoURL,
-    //     },
-    //     {
-    //       withCredentials: true,
-    //     },
-    //   );
+      console.log(result.user);
 
-      toast.success("Logged in with Google!");
-    //   window.location.reload();
-    //   onclose();
+      toast.success(
+        `Welcome ${result.user.displayName || result.user.email}`
+      );
     } catch (error) {
-        console.log(error);
-        
-    //   if (error.code !== "auth/popup-closed-by-user") {
-    //     handleFirebaseError(error);
+      console.log(error);
 
-    //     toast.error(error.message || "Google auth failed");
-    //   }
+      setErrorMsg(error.message);
+      toast.error(error.message);
     }
   };
+
   return (
-    <div className='w-full min-h-screen bg-[#f3f3f3] flex items-cneter justify-center px-6 py-20'>
-        <motion.div 
-        initial={{opacity:0, y:-40 }} animate={{opacity:1 , y:0}} transition={{duration:1.01}}
-        className='w-full max-w-md p-8 rounded-3xl bg-white shadow-2xl border border-gray-200'>
-            <div className='flex items-center justify-center gap-3 mb-6'>
-                <div className='bg-green-500 text-white p-2 rounded-lg'>
-                <LiaRobotSolid size={18}/>
-                </div>
-                <h2 className='font-semibold text-lg'>IntervuAI</h2>
-            </div>
-                <h1 className='text-2xl md:text-3xl font-semibold text-center leading-snug md-4'>
-                    Continue With
-                    <span className='bg-green-100 text-green-600 px-3 py-1 rounded-full inline-flex items-center gap-2'>
-                    <IoSparklesSharp size={1}/>
-                    AI Smart Interview
-                    </span>
-                </h1>
-                <p className='text-gray-500 text-center text-sm md:text-base leading-relaxed mb-8'>
-                    SignIn to start AI-Powered mock interviews,track your progress, and unlock detailed performance insights.
-                </p>
+    <div className="w-full min-h-screen bg-[#f5f7fb] flex items-center justify-center px-6 py-10">
+      <motion.div
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-gray-200 p-8"
+      >
+        {/* Logo */}
+        <div className="flex items-center justify-center gap-3 mb-8">
+          <div className="bg-green-500 text-white p-3 rounded-xl">
+            <LiaRobotSolid size={24} />
+          </div>
 
-                <motion.button onClick={handleGoogleAuth}
-                whileHover={{opacity:0.9 , scale:1.03}} whileTap={{opacity:1 , scale:.98}}
-                className='w-full flex items-center justify-center gap-3 py-3 bg-black text-white rounded-full shadow-md'>
-                <FcGoogle size={20}/>
-                Continue with Google
-                </motion.button>
-        </motion.div>
-      
+          <h2 className="text-2xl font-bold">IntervuAI</h2>
+        </div>
+
+        {/* Heading */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold">
+            {isLogin ? "Welcome Back 👋" : "Create Account 🚀"}
+          </h1>
+
+          <p className="text-gray-500 mt-2">
+            {isLogin
+              ? "Login to continue your AI interview journey."
+              : "Sign up and start practicing AI-powered interviews."}
+          </p>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleAuth} className="space-y-4">
+          {/* Username */}
+          {!isLogin && (
+            <input
+              type="text"
+              name="username"
+              placeholder="Enter your username"
+              value={formData.username}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-green-500"
+            />
+          )}
+
+          {/* Email */}
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter your email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-green-500"
+          />
+
+          {/* Password */}
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Enter your password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded-xl px-4 py-3 pr-12 outline-none focus:border-green-500"
+            />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black"
+            >
+              {showPassword ? (
+                <FaEyeSlash size={18} />
+              ) : (
+                <FaEye size={18} />
+              )}
+            </button>
+          </div>
+
+          {/* Error */}
+          {errorMsg && (
+            <p className="text-red-500 text-sm">{errorMsg}</p>
+          )}
+
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-3 bg-green-500 hover:bg-green-600 transition text-white rounded-xl font-semibold disabled:opacity-70"
+          >
+            {loading
+              ? "Please wait..."
+              : isLogin
+              ? "Login"
+              : "Create Account"}
+          </button>
+        </form>
+
+        {/* Divider */}
+        <div className="flex items-center gap-4 my-7">
+          <div className="flex-1 h-px bg-gray-300" />
+
+          <span className="text-sm text-gray-400">OR</span>
+
+          <div className="flex-1 h-px bg-gray-300" />
+        </div>
+
+        {/* Google Auth */}
+        <motion.button
+          onClick={handleGoogleAuth}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="w-full flex items-center justify-center gap-3 py-3 border border-gray-300 rounded-xl font-medium hover:bg-gray-50 transition"
+        >
+          <FcGoogle size={22} />
+
+          Continue with Google
+        </motion.button>
+
+        {/* Toggle */}
+        <p className="text-center text-sm mt-7 text-gray-600">
+          {isLogin
+            ? "Don't have an account?"
+            : "Already have an account?"}
+
+          <button
+            type="button"
+            onClick={() => {
+              setIsLogin(!isLogin);
+              setErrorMsg("");
+
+              setFormData({
+                username: "",
+                email: "",
+                password: "",
+              });
+            }}
+            className="ml-2 text-green-600 font-semibold hover:underline"
+          >
+            {isLogin ? "Sign Up" : "Login"}
+          </button>
+        </p>
+      </motion.div>
     </div>
-  )
-}
+  );
+};
 
-export default Auth
+export default Auth;
