@@ -107,8 +107,8 @@ const ResumeAnalysis = () => {
   if (loading) {
     return (
       <div className="space-y-8 animate-pulse">
-        <div className="h-8 w-48 bg-gray-900 rounded-lg" />
-        <div className="h-[250px] bg-gray-950 border border-gray-900 rounded-3xl" />
+        <div className="h-8 w-48 bg-slate-200 rounded-lg" />
+        <div className="h-[250px] bg-white border border-slate-200 rounded-3xl" />
       </div>
     );
   }
@@ -117,7 +117,7 @@ const ResumeAnalysis = () => {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-extrabold text-white tracking-tight">Resume Profile Analysis</h1>
+        <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight">Resume Profile Analysis</h1>
         <p className="text-sm text-gray-500 mt-1">
           Upload your resume PDF. Gemini AI will automatically index your skill stack, strengths, and weakness profile.
         </p>
@@ -135,16 +135,16 @@ const ResumeAnalysis = () => {
           >
             {uploading ? (
               // Uploading loader screen
-              <div className="w-full min-h-[350px] bg-gray-950/20 border border-gray-900 rounded-[32px] p-8 flex flex-col items-center justify-center text-center shadow-xl">
+              <div className="w-full min-h-[350px] bg-white border border-slate-200 rounded-[32px] p-8 flex flex-col items-center justify-center text-center shadow-xl">
                 <div className="relative w-16 h-16 mb-6">
                   {/* Rotating loader ring */}
-                  <div className="absolute inset-0 rounded-full border-4 border-emerald-950/40 border-t-emerald-400 animate-spin" />
-                  <div className="absolute inset-2 bg-emerald-500/10 rounded-full flex items-center justify-center text-emerald-400">
+                  <div className="absolute inset-0 rounded-full border-4 border-emerald-100 border-t-emerald-500 animate-spin" />
+                  <div className="absolute inset-2 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-600">
                     <Brain size={24} className="animate-pulse" />
                   </div>
                 </div>
-                <h3 className="text-lg font-bold text-white">Gemini is analyzing your resume</h3>
-                <p className="text-xs text-gray-500 max-w-sm mt-2 leading-relaxed">
+                <h3 className="text-lg font-bold text-slate-800">Gemini is analyzing your resume</h3>
+                <p className="text-xs text-slate-500 max-w-sm mt-2 leading-relaxed">
                   We are parsing the text document, mapping your technical capabilities, and preparing candidate profiles. This usually takes around 5 seconds.
                 </p>
               </div>
@@ -157,21 +157,21 @@ const ResumeAnalysis = () => {
                 onDrop={handleDrop}
                 className={`w-full min-h-[350px] rounded-[32px] border-2 border-dashed p-8 flex flex-col items-center justify-center text-center transition-all duration-300 relative overflow-hidden group shadow-xl ${
                   dragActive
-                    ? "border-emerald-400 bg-emerald-950/5"
-                    : "border-gray-900 bg-gray-950/20 hover:border-gray-800"
+                    ? "border-emerald-400 bg-emerald-50"
+                    : "border-slate-200 bg-white hover:border-slate-300"
                 }`}
               >
                 {/* Visual grid indicator */}
                 <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none" />
 
-                <div className="w-16 h-16 rounded-2xl bg-gray-900/60 border border-gray-800 flex items-center justify-center mb-6 group-hover:bg-emerald-950/30 group-hover:border-emerald-500/20 transition-all duration-300">
-                  <UploadCloud size={28} className="text-gray-400 group-hover:text-emerald-400 transition" />
+                <div className="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center mb-6 group-hover:bg-emerald-50 group-hover:border-emerald-200 transition-all duration-300">
+                  <UploadCloud size={28} className="text-slate-400 group-hover:text-emerald-600 transition" />
                 </div>
 
-                <h3 className="text-xl font-bold text-white mb-2">Drag and drop your PDF resume here</h3>
-                <p className="text-sm text-gray-500 mb-6">Support PDF file up to 5MB max.</p>
+                <h3 className="text-xl font-bold text-slate-800 mb-2">Drag and drop your PDF resume here</h3>
+                <p className="text-sm text-slate-500 mb-6">Support PDF file up to 5MB max.</p>
 
-                <label className="bg-emerald-500 hover:bg-emerald-600 text-black font-extrabold px-6 py-3 rounded-2xl transition cursor-pointer shadow-lg shadow-emerald-500/15">
+                <label className="bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold px-6 py-3 rounded-2xl transition cursor-pointer shadow-lg shadow-emerald-500/15">
                   Browse File
                   <input
                     type="file"
@@ -194,19 +194,19 @@ const ResumeAnalysis = () => {
             className="space-y-6"
           >
             {/* Resume Overview Widget */}
-            <div className="bg-gray-950/45 border border-gray-900 rounded-[32px] p-6 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="bg-white border border-slate-200 rounded-[32px] p-6 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-center gap-4">
-                <div className="bg-emerald-950/40 border border-emerald-900/30 text-emerald-400 p-3.5 rounded-2xl">
+                <div className="bg-emerald-50 border border-emerald-100 text-emerald-600 p-3.5 rounded-2xl">
                   <FileText size={24} />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white">{resume.fileName}</h3>
+                  <h3 className="text-lg font-bold text-slate-800">{resume.fileName}</h3>
                   <div className="flex items-center gap-2 mt-1.5">
-                    <span className="text-[10px] uppercase font-black px-2.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/10">
+                    <span className="text-[10px] uppercase font-black px-2.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 border border-emerald-500/10">
                       Parsed
                     </span>
-                    <span className="text-[10px] text-gray-500">
-                      Experience level: <strong className="text-gray-300 font-semibold">{resume.analysis.experienceLevel}</strong>
+                    <span className="text-[10px] text-slate-500">
+                      Experience level: <strong className="text-slate-700 font-semibold">{resume.analysis.experienceLevel}</strong>
                     </span>
                   </div>
                 </div>
@@ -215,13 +215,13 @@ const ResumeAnalysis = () => {
               <div className="flex items-center gap-3 w-full sm:w-auto">
                 <button
                   onClick={handleReset}
-                  className="w-full sm:w-auto bg-gray-900 hover:bg-gray-800 text-gray-300 border border-gray-800 font-semibold py-3 px-5 rounded-2xl transition text-sm cursor-pointer"
+                  className="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 font-semibold py-3 px-5 rounded-2xl transition text-sm cursor-pointer"
                 >
                   Upload Another
                 </button>
                 <button
                   onClick={() => navigate("/dashboard/new", { state: { resumeId: resume._id } })}
-                  className="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-600 text-black font-extrabold py-3 px-5 rounded-2xl transition flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/10 text-sm cursor-pointer"
+                  className="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold py-3 px-5 rounded-2xl transition flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/10 text-sm cursor-pointer"
                 >
                   Configure Practice <ArrowRight size={14} />
                 </button>
@@ -231,14 +231,14 @@ const ResumeAnalysis = () => {
             {/* Profile Grid Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Skills card */}
-              <div className="bg-gray-950/25 border border-gray-900 rounded-[32px] p-6 flex flex-col justify-between">
+              <div className="bg-white border border-slate-200 rounded-[32px] p-6 flex flex-col justify-between shadow-sm">
                 <div>
-                  <h4 className="text-sm font-bold text-gray-400 mb-4 tracking-wide uppercase">Identified Skill Stack</h4>
+                  <h4 className="text-sm font-bold text-slate-400 mb-4 tracking-wide uppercase">Identified Skill Stack</h4>
                   <div className="flex flex-wrap gap-2">
                     {resume.analysis.skills.map((skill, i) => (
                       <span
                         key={i}
-                        className="bg-gray-900/60 border border-gray-800 text-gray-300 px-3 py-1.5 rounded-xl text-xs font-semibold"
+                        className="bg-slate-100 border border-slate-200 text-slate-600 px-3 py-1.5 rounded-xl text-xs font-semibold"
                       >
                         {skill}
                       </span>
@@ -248,11 +248,11 @@ const ResumeAnalysis = () => {
               </div>
 
               {/* Strengths card */}
-              <div className="bg-gray-950/25 border border-gray-900 rounded-[32px] p-6">
-                <h4 className="text-sm font-bold text-gray-400 mb-4 tracking-wide uppercase">Core Strengths</h4>
+              <div className="bg-white border border-slate-200 rounded-[32px] p-6 shadow-sm">
+                <h4 className="text-sm font-bold text-slate-400 mb-4 tracking-wide uppercase">Core Strengths</h4>
                 <ul className="space-y-3">
                   {resume.analysis.strengths.map((str, i) => (
-                    <li key={i} className="flex items-start gap-2.5 text-xs text-gray-400 leading-relaxed">
+                    <li key={i} className="flex items-start gap-2.5 text-xs text-slate-600 leading-relaxed">
                       <CheckCircle size={15} className="text-emerald-500 shrink-0 mt-0.5" />
                       <span>{str}</span>
                     </li>
@@ -261,11 +261,11 @@ const ResumeAnalysis = () => {
               </div>
 
               {/* Weaknesses card */}
-              <div className="bg-gray-950/25 border border-gray-900 rounded-[32px] p-6">
-                <h4 className="text-sm font-bold text-gray-400 mb-4 tracking-wide uppercase">Identified Gaps / Weaknesses</h4>
+              <div className="bg-white border border-slate-200 rounded-[32px] p-6 shadow-sm">
+                <h4 className="text-sm font-bold text-slate-400 mb-4 tracking-wide uppercase">Identified Gaps / Weaknesses</h4>
                 <ul className="space-y-3">
                   {resume.analysis.weaknesses.map((weak, i) => (
-                    <li key={i} className="flex items-start gap-2.5 text-xs text-gray-400 leading-relaxed">
+                    <li key={i} className="flex items-start gap-2.5 text-xs text-slate-600 leading-relaxed">
                       <AlertTriangle size={15} className="text-amber-500 shrink-0 mt-0.5" />
                       <span>{weak}</span>
                     </li>
@@ -274,14 +274,14 @@ const ResumeAnalysis = () => {
               </div>
 
               {/* Suggested Questions */}
-              <div className="bg-gray-950/25 border border-gray-900 rounded-[32px] p-6">
-                <h4 className="text-sm font-bold text-gray-400 mb-4 tracking-wide uppercase flex items-center gap-1.5">
-                  <Sparkles size={14} className="text-emerald-400" /> Probable AI Questions
+              <div className="bg-white border border-slate-200 rounded-[32px] p-6 shadow-sm">
+                <h4 className="text-sm font-bold text-slate-400 mb-4 tracking-wide uppercase flex items-center gap-1.5">
+                  <Sparkles size={14} className="text-emerald-500" /> Probable AI Questions
                 </h4>
                 <ul className="space-y-3">
                   {resume.analysis.suggestedQuestions.map((q, i) => (
-                    <li key={i} className="flex items-start gap-3 text-xs text-gray-400 leading-normal">
-                      <span className="w-5 h-5 rounded-full bg-emerald-950 border border-emerald-900/30 text-emerald-400 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
+                    <li key={i} className="flex items-start gap-3 text-xs text-slate-600 leading-normal">
+                      <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
                         {i + 1}
                       </span>
                       <span>{q}</span>

@@ -49,24 +49,24 @@ const DashboardLayout = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#090d16] text-[#f8fafc] flex flex-col md:flex-row font-sans relative overflow-hidden">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-800 flex flex-col md:flex-row font-sans relative overflow-hidden">
       {/* Background glow effects */}
       <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full bg-emerald-500/5 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] rounded-full bg-blue-500/5 blur-[150px] pointer-events-none" />
 
       {/* Mobile Header Bar */}
-      <div className="w-full md:hidden bg-[#090d16]/90 border-b border-gray-800/80 px-6 py-4 flex items-center justify-between sticky top-0 z-50 backdrop-blur-md">
+      <div className="w-full md:hidden bg-[#F8FAFC]/90 border-b border-slate-200 px-6 py-4 flex items-center justify-between sticky top-0 z-50 backdrop-blur-md">
         <div className="flex items-center gap-3">
           <div className="bg-emerald-500 text-white p-1.5 rounded-lg">
             <Bot size={18} />
           </div>
-          <span className="text-lg font-bold tracking-tight bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">
+          <span className="text-lg font-bold tracking-tight bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
             IntervuAI
           </span>
         </div>
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="text-gray-400 hover:text-white p-1"
+          className="text-slate-500 hover:text-slate-800 p-1"
         >
           {mobileOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
@@ -74,7 +74,7 @@ const DashboardLayout = () => {
 
       {/* Sidebar - Desktop & Mobile overlay */}
       <aside
-        className={`w-64 bg-gray-950/80 backdrop-blur-lg border-r border-gray-900 flex flex-col justify-between p-6 fixed md:sticky top-[61px] md:top-0 h-[calc(100vh-61px)] md:h-screen z-40 transition-transform duration-300 ${
+        className={`w-64 bg-white/95 backdrop-blur-lg border-r border-slate-200 flex flex-col justify-between p-6 fixed md:sticky top-[61px] md:top-0 h-[calc(100vh-61px)] md:h-screen z-40 transition-transform duration-300 ${
           mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >
@@ -84,7 +84,7 @@ const DashboardLayout = () => {
             <div className="bg-emerald-500 text-white p-2 rounded-xl shadow-lg shadow-emerald-500/20">
               <Bot size={22} />
             </div>
-            <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">
+            <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
               IntervuAI
             </span>
           </div>
@@ -101,7 +101,7 @@ const DashboardLayout = () => {
                   `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 group ${
                     isActive
                       ? "bg-emerald-500 text-black shadow-lg shadow-emerald-500/15"
-                      : "text-gray-400 hover:text-white hover:bg-gray-900/40"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
                   }`
                 }
               >
@@ -113,20 +113,20 @@ const DashboardLayout = () => {
         </div>
 
         {/* User Stats Card in Sidebar footer */}
-        <div className="border-t border-gray-900 pt-6 flex flex-col gap-4">
+        <div className="border-t border-slate-200 pt-6 flex flex-col gap-4">
           <div className="flex items-center gap-2.5 px-2">
-            <div className="bg-emerald-950/50 border border-emerald-900/50 text-emerald-400 p-1.5 rounded-full flex items-center justify-center">
+            <div className="bg-emerald-50 border border-emerald-100 text-emerald-600 p-1.5 rounded-full flex items-center justify-center">
               <Coins size={14} className="text-amber-500 animate-spin-slow" />
             </div>
             <div className="text-xs">
               <p className="text-gray-500 leading-none">Credit Balance</p>
-              <p className="text-sm font-extrabold text-emerald-400 mt-0.5">
+              <p className="text-sm font-extrabold text-emerald-600 mt-0.5">
                 {user.credits} Credits
               </p>
             </div>
           </div>
 
-          <div className="bg-gray-900/40 border border-gray-900 p-3.5 rounded-2xl flex items-center justify-between gap-3">
+          <div className="bg-slate-50 border border-slate-200/60 p-3.5 rounded-2xl flex items-center justify-between gap-3">
             <div className="flex items-center gap-2 overflow-hidden">
               {user.avatar ? (
                 <img
@@ -136,12 +136,12 @@ const DashboardLayout = () => {
                   className="w-8 h-8 rounded-full object-cover ring-2 ring-emerald-500/10 shrink-0"
                 />
               ) : (
-                <div className="w-8 h-8 rounded-full bg-emerald-950 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">
+                <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-sm shrink-0">
                   {user.name[0].toUpperCase()}
                 </div>
               )}
               <div className="text-left overflow-hidden">
-                <p className="text-xs font-bold text-gray-200 truncate leading-tight">
+                <p className="text-xs font-bold text-slate-800 truncate leading-tight">
                   {user.name}
                 </p>
                 <p className="text-[10px] text-gray-500 truncate mt-0.5">
@@ -152,7 +152,7 @@ const DashboardLayout = () => {
 
             <button
               onClick={handleLogout}
-              className="text-gray-500 hover:text-red-400 transition cursor-pointer p-1 rounded-lg hover:bg-gray-900/60"
+              className="text-slate-400 hover:text-red-500 transition cursor-pointer p-1 rounded-lg hover:bg-slate-100"
               title="Sign Out"
             >
               <LogOut size={16} />

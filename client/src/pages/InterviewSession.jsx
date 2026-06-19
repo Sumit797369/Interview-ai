@@ -162,9 +162,11 @@ const InterviewSession = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#090d16] flex flex-col items-center justify-center gap-4 text-white">
-        <div className="w-12 h-12 rounded-full border-4 border-emerald-950/40 border-t-emerald-400 animate-spin" />
-        <p className="text-sm text-gray-500 animate-pulse">Loading mock interview room...</p>
+      <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center gap-4 text-slate-800">
+        <div className="relative w-12 h-12">
+          <div className="absolute inset-0 rounded-full border-4 border-emerald-100 border-t-emerald-500 animate-spin" />
+        </div>
+        <p className="text-sm text-slate-500 animate-pulse">Loading mock interview room...</p>
       </div>
     );
   }
@@ -174,7 +176,7 @@ const InterviewSession = () => {
   const progressPercent = Math.round(((activeIndex + 1) / interview.questions.length) * 100);
 
   return (
-    <div className="min-h-screen bg-[#090d16] text-[#f8fafc] flex flex-col justify-between selection:bg-emerald-500/30">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-800 flex flex-col justify-between selection:bg-emerald-500/20 selection:text-emerald-800">
       <AnimatePresence>
         {evaluating && (
           // Fullscreen loader overlay on evaluate
@@ -182,16 +184,16 @@ const InterviewSession = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-[#090d16]/95 backdrop-blur-md flex flex-col items-center justify-center text-center p-6"
+            className="fixed inset-0 z-50 bg-[#F8FAFC]/95 backdrop-blur-md flex flex-col items-center justify-center text-center p-6"
           >
             <div className="relative w-20 h-20 mb-8">
-              <div className="absolute inset-0 rounded-full border-4 border-emerald-950/40 border-t-emerald-400 animate-spin" />
-              <div className="absolute inset-3 bg-emerald-500/10 rounded-full flex items-center justify-center text-emerald-400">
+              <div className="absolute inset-0 rounded-full border-4 border-emerald-100 border-t-emerald-500 animate-spin" />
+              <div className="absolute inset-3 bg-emerald-50/50 rounded-full flex items-center justify-center text-emerald-600">
                 <Bot size={32} className="animate-pulse" />
               </div>
             </div>
-            <h3 className="text-2xl font-bold text-white tracking-tight">Evaluating Performance</h3>
-            <p className="text-sm text-gray-400 max-w-md mt-2 leading-relaxed">
+            <h3 className="text-2xl font-bold text-slate-800 tracking-tight">Evaluating Performance</h3>
+            <p className="text-sm text-slate-500 max-w-md mt-2 leading-relaxed">
               Gemini AI is analyzing your answers against the resume criteria. Checking communication, confidence, technical keywords, and overall score...
             </p>
           </motion.div>
@@ -199,7 +201,7 @@ const InterviewSession = () => {
       </AnimatePresence>
 
       {/* Fullscreen Header */}
-      <header className="w-full border-b border-gray-900 bg-gray-950/60 backdrop-blur-md px-6 py-4 flex items-center justify-between sticky top-0 z-30">
+      <header className="w-full border-b border-slate-200 bg-white/60 backdrop-blur-md px-6 py-4 flex items-center justify-between sticky top-0 z-30">
         <div className="flex items-center gap-3">
           <Link
             to="/dashboard"
@@ -208,23 +210,23 @@ const InterviewSession = () => {
                 e.preventDefault();
               }
             }}
-            className="text-gray-500 hover:text-white p-1 rounded-lg hover:bg-gray-900"
+            className="text-slate-500 hover:text-slate-900 p-1 rounded-lg hover:bg-slate-100"
           >
             <ArrowLeft size={18} />
           </Link>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-sm font-bold text-white">Mock Interview Room</span>
-              <span className="text-[9px] font-bold uppercase bg-emerald-500/10 border border-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-md">
+              <span className="text-sm font-bold text-slate-800">Mock Interview Room</span>
+              <span className="text-[9px] font-bold uppercase bg-emerald-50 border border-emerald-100 text-emerald-600 px-2 py-0.5 rounded-md">
                 {interview.type}
               </span>
             </div>
-            <p className="text-[10px] text-gray-500 mt-0.5">Difficulty: {interview.difficulty}</p>
+            <p className="text-[10px] text-slate-400 mt-0.5">Difficulty: {interview.difficulty}</p>
           </div>
         </div>
 
         {/* Timer */}
-        <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-gray-900 border border-gray-800 text-sm font-mono text-emerald-400">
+        <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-white border border-slate-200 text-sm font-mono text-emerald-600 shadow-sm">
           <Clock size={15} />
           <span>{formatTime(secondsElapsed)}</span>
         </div>
@@ -234,7 +236,7 @@ const InterviewSession = () => {
       <div className="flex-1 max-w-7xl mx-auto w-full px-6 py-8 flex flex-col md:flex-row gap-8 items-stretch h-[calc(100vh-140px)] overflow-hidden">
         {/* Left column: questions progress tracker */}
         <aside className="w-full md:w-1/4 flex flex-col gap-4 overflow-y-auto pr-2 shrink-0 h-full">
-          <h4 className="text-xs font-bold text-gray-500 tracking-wider uppercase px-1">Questions Timeline</h4>
+          <h4 className="text-xs font-bold text-slate-400 tracking-wider uppercase px-1">Questions Timeline</h4>
           <div className="flex flex-col gap-2">
             {interview.questions.map((q, idx) => {
               const isCompleted = (answers[q.questionId] || "").trim().length > 0;
@@ -246,17 +248,17 @@ const InterviewSession = () => {
                   onClick={() => handleNavigate(idx)}
                   className={`w-full text-left p-3.5 rounded-2xl border transition-all duration-200 flex items-start gap-3 cursor-pointer ${
                     isActive
-                      ? "bg-emerald-500/10 border-emerald-500 text-white font-semibold"
-                      : "bg-gray-950/20 border-gray-900 text-gray-400 hover:border-gray-800 hover:text-white"
+                      ? "bg-emerald-50 border-emerald-500 text-slate-800 font-semibold"
+                      : "bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-800"
                   }`}
                 >
                   <span
                     className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] shrink-0 mt-0.5 font-bold ${
                       isActive
-                        ? "bg-emerald-500 text-black"
+                        ? "bg-emerald-500 text-white"
                         : isCompleted
-                        ? "bg-emerald-950/80 text-emerald-400 border border-emerald-900/30"
-                        : "bg-gray-900 text-gray-600"
+                        ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
+                        : "bg-slate-100 text-slate-400"
                     }`}
                   >
                     {isCompleted && !isActive ? <Check size={10} className="stroke-[3]" /> : idx + 1}
@@ -269,29 +271,29 @@ const InterviewSession = () => {
         </aside>
 
         {/* Center column: active question input */}
-        <main className="flex-1 bg-gray-950/20 border border-gray-900 rounded-[32px] p-6 md:p-8 flex flex-col justify-between h-full overflow-y-auto relative">
+        <main className="flex-1 bg-white border border-slate-200 rounded-[32px] p-6 md:p-8 flex flex-col justify-between h-full overflow-y-auto relative shadow-sm">
           <div className="space-y-6">
             {/* Question Card */}
-            <div className="bg-gray-900/30 border border-gray-900 p-5 rounded-3xl relative overflow-hidden">
-              <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">Question {activeIndex + 1} of {interview.questions.length}</span>
-              <h2 className="text-lg font-bold text-white mt-2 leading-relaxed">
+            <div className="bg-slate-50 border border-slate-100 p-5 rounded-3xl relative overflow-hidden">
+              <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Question {activeIndex + 1} of {interview.questions.length}</span>
+              <h2 className="text-lg font-bold text-slate-800 mt-2 leading-relaxed">
                 {currentQ.questionText}
               </h2>
             </div>
 
             {/* Answer Input */}
             <div className="space-y-2 relative">
-              <label className="text-xs font-bold text-gray-500 uppercase tracking-wide px-1">Your Response</label>
+              <label className="text-xs font-bold text-slate-400 uppercase tracking-wide px-1">Your Response</label>
               <textarea
                 value={currentAnswer}
                 onChange={handleTextChange}
                 placeholder="Structure your answer clearly. Explain key terms, projects, methodologies, and edge cases where applicable..."
-                className="w-full min-h-[180px] bg-gray-950/50 border border-gray-900 rounded-3xl p-5 text-sm outline-none focus:border-emerald-500 text-gray-200 leading-relaxed resize-none"
+                className="w-full min-h-[180px] bg-white border border-slate-200 rounded-3xl p-5 text-sm outline-none focus:border-emerald-500 text-slate-800 leading-relaxed resize-none"
               />
 
               {/* Status Indicators footer */}
               <div className="flex justify-between items-center px-2">
-                <span className="text-[10px] text-gray-600">
+                <span className="text-[10px] text-slate-400">
                   {currentAnswer.length} characters
                 </span>
                 <AnimatePresence>
@@ -300,7 +302,7 @@ const InterviewSession = () => {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      className="text-[9px] text-emerald-400 font-semibold flex items-center gap-1"
+                      className="text-[9px] text-emerald-600 font-semibold flex items-center gap-1"
                     >
                       <Save size={10} className="animate-pulse" /> Progress Saving...
                     </motion.span>
@@ -311,11 +313,11 @@ const InterviewSession = () => {
           </div>
 
           {/* Navigation Controls */}
-          <div className="flex items-center justify-between border-t border-gray-900 pt-6 mt-6">
+          <div className="flex items-center justify-between border-t border-slate-100 pt-6 mt-6">
             <button
               onClick={() => handleNavigate(activeIndex - 1)}
               disabled={activeIndex === 0}
-              className="px-5 py-3 rounded-2xl border border-gray-900 text-gray-400 hover:text-white hover:border-gray-800 disabled:opacity-30 disabled:hover:text-gray-400 disabled:hover:border-gray-900 transition flex items-center gap-1.5 text-xs font-semibold cursor-pointer"
+              className="px-5 py-3 rounded-2xl border border-slate-200 text-slate-500 hover:text-slate-800 hover:border-slate-300 disabled:opacity-30 disabled:hover:text-slate-500 disabled:hover:border-slate-200 transition flex items-center gap-1.5 text-xs font-semibold cursor-pointer"
             >
               <ArrowLeft size={14} /> Previous
             </button>
@@ -323,7 +325,7 @@ const InterviewSession = () => {
             {activeIndex === interview.questions.length - 1 ? (
               <button
                 onClick={handleEndInterview}
-                className="bg-emerald-500 hover:bg-emerald-600 text-black font-extrabold px-6 py-3 rounded-2xl transition flex items-center gap-1.5 shadow-lg shadow-emerald-500/10 text-xs cursor-pointer"
+                className="bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold px-6 py-3 rounded-2xl transition flex items-center gap-1.5 shadow-lg shadow-emerald-500/10 text-xs cursor-pointer"
               >
                 Submit & End Interview <Send size={13} />
               </button>
@@ -331,13 +333,13 @@ const InterviewSession = () => {
               <div className="flex gap-2">
                 <button
                   onClick={() => handleNavigate(activeIndex + 1)}
-                  className="px-5 py-3 rounded-2xl border border-gray-900 text-gray-500 hover:text-white hover:border-gray-800 transition text-xs font-semibold cursor-pointer"
+                  className="px-5 py-3 rounded-2xl border border-slate-200 text-slate-500 hover:text-slate-800 hover:border-slate-300 transition text-xs font-semibold cursor-pointer"
                 >
                   Skip Question
                 </button>
                 <button
                   onClick={() => handleNavigate(activeIndex + 1)}
-                  className="bg-emerald-500 hover:bg-emerald-600 text-black font-extrabold px-5 py-3 rounded-2xl transition flex items-center gap-1.5 shadow-lg shadow-emerald-500/10 text-xs cursor-pointer"
+                  className="bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold px-5 py-3 rounded-2xl transition flex items-center gap-1.5 shadow-lg shadow-emerald-500/10 text-xs cursor-pointer"
                 >
                   Next Question <ArrowRight size={14} />
                 </button>
@@ -348,16 +350,16 @@ const InterviewSession = () => {
 
         {/* Right column: Stats summary cards */}
         <aside className="w-full md:w-1/5 flex flex-col gap-6 shrink-0 h-full justify-start">
-          <div className="bg-gray-950/45 border border-gray-900 rounded-[32px] p-5 shadow-xl space-y-5">
-            <h4 className="text-xs font-bold text-gray-500 tracking-wider uppercase leading-none">Session Status</h4>
+          <div className="bg-white border border-slate-200 rounded-[32px] p-5 shadow-sm space-y-5">
+            <h4 className="text-xs font-bold text-slate-400 tracking-wider uppercase leading-none">Session Status</h4>
 
             {/* Progress Bar */}
             <div className="space-y-2">
-              <div className="flex justify-between text-[10px] font-bold text-gray-400">
+              <div className="flex justify-between text-[10px] font-bold text-slate-500">
                 <span>Progress</span>
                 <span>{progressPercent}%</span>
               </div>
-              <div className="w-full h-1.5 rounded-full bg-gray-900 overflow-hidden">
+              <div className="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden">
                 <div
                   className="h-full bg-emerald-500 transition-all duration-300"
                   style={{ width: `${progressPercent}%` }}
@@ -366,30 +368,30 @@ const InterviewSession = () => {
             </div>
 
             {/* Details details */}
-            <div className="h-px bg-gray-900" />
+            <div className="h-px bg-slate-100" />
 
             <div className="space-y-3">
               <div>
-                <p className="text-[10px] text-gray-600 leading-none">Category</p>
-                <p className="text-xs font-bold text-gray-300 capitalize mt-1 leading-none">{interview.type} Round</p>
+                <p className="text-[10px] text-slate-400 leading-none">Category</p>
+                <p className="text-xs font-bold text-slate-700 capitalize mt-1 leading-none">{interview.type} Round</p>
               </div>
               <div>
-                <p className="text-[10px] text-gray-600 leading-none">Difficulty</p>
-                <p className="text-xs font-bold text-gray-300 capitalize mt-1 leading-none">{interview.difficulty}</p>
+                <p className="text-[10px] text-slate-400 leading-none">Difficulty</p>
+                <p className="text-xs font-bold text-slate-700 capitalize mt-1 leading-none">{interview.difficulty}</p>
               </div>
               <div>
-                <p className="text-[10px] text-gray-600 leading-none">Target questions</p>
-                <p className="text-xs font-bold text-gray-300 mt-1 leading-none">{interview.questions.length} Questions</p>
+                <p className="text-[10px] text-slate-400 leading-none">Target questions</p>
+                <p className="text-xs font-bold text-slate-700 mt-1 leading-none">{interview.questions.length} Questions</p>
               </div>
             </div>
           </div>
 
           {/* Guidelines Tips banner */}
-          <div className="bg-emerald-500/5 border border-emerald-500/10 rounded-[32px] p-5">
-            <h5 className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest mb-2 flex items-center gap-1.5">
+          <div className="bg-emerald-50 border border-emerald-100 rounded-[32px] p-5">
+            <h5 className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest mb-2 flex items-center gap-1.5">
               <Sparkles size={12} /> Pro Tip
             </h5>
-            <p className="text-[10px] text-gray-500 leading-relaxed">
+            <p className="text-[10px] text-slate-500 leading-relaxed">
               Interviews can be completed any time by clicking "Submit & End Interview". Try to write thorough, structured responses for optimal AI evaluations.
             </p>
           </div>

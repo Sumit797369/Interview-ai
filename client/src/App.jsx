@@ -22,14 +22,14 @@ const App = () => {
 
   if (loading) {
     return (
-      <div className="w-full min-h-screen bg-[#090d16] flex flex-col items-center justify-center gap-4 text-white">
+      <div className="w-full min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center gap-4 text-slate-800">
         <div className="relative w-14 h-14">
-          <div className="absolute inset-0 rounded-full border-4 border-emerald-950/40 border-t-emerald-400 animate-spin" />
-          <div className="absolute inset-2 bg-emerald-500/10 rounded-full flex items-center justify-center text-emerald-400">
+          <div className="absolute inset-0 rounded-full border-4 border-emerald-100 border-t-emerald-500 animate-spin" />
+          <div className="absolute inset-2 bg-emerald-500/10 rounded-full flex items-center justify-center text-emerald-600">
             <Bot size={22} className="animate-pulse" />
           </div>
         </div>
-        <div className="text-sm font-semibold text-gray-500 animate-pulse">
+        <div className="text-sm font-semibold text-gray-600 animate-pulse">
           Loading IntervuAI...
         </div>
       </div>
@@ -57,7 +57,7 @@ const App = () => {
           <Route path='settings' element={<Settings />} />
         </Route>
       </Routes>
-      <ToastContainer position="top-right" autoClose={3000} theme="dark" />
+      <ToastContainer position="top-right" autoClose={3000} theme="light" />
     </>
   )
 }

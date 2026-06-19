@@ -146,7 +146,7 @@ const Pricing = () => {
         "Communication feedback logs",
         "Auto-saved question histories",
       ],
-      color: "border-gray-900 bg-gray-950/40",
+      color: "border-slate-200 bg-white shadow-sm",
       btnText: "Purchase Starter",
     },
     {
@@ -164,7 +164,7 @@ const Pricing = () => {
         "Actionable improvement suggestions",
         "Curated learning roadmaps",
       ],
-      color: "border-emerald-500/50 bg-gray-950/80 shadow-lg shadow-emerald-500/5",
+      color: "border-emerald-500/50 bg-white shadow-lg shadow-emerald-500/10",
       btnText: "Get Pro Access",
     },
     {
@@ -181,7 +181,7 @@ const Pricing = () => {
         "Advanced score radars & progress charts",
         "PDF download report directories",
       ],
-      color: "border-gray-900 bg-gray-950/40",
+      color: "border-slate-200 bg-white shadow-sm",
       btnText: "Unlock Unlimited",
     },
   ];
@@ -195,35 +195,35 @@ const Pricing = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-[#090d16]/90 backdrop-blur-md flex items-center justify-center p-6 text-center"
+            className="fixed inset-0 z-50 bg-[#F8FAFC]/90 backdrop-blur-md flex items-center justify-center p-6 text-center"
           >
             <motion.div
               initial={{ scale: 0.9, y: 15 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 15 }}
-              className="bg-gray-950 border border-gray-800 rounded-[32px] p-8 max-w-sm w-full relative shadow-2xl"
+              className="bg-white border border-slate-200 rounded-[32px] p-8 max-w-sm w-full relative shadow-2xl"
             >
               <button
                 onClick={() => setMockCheckout(null)}
-                className="absolute top-5 right-5 text-gray-500 hover:text-white"
+                className="absolute top-5 right-5 text-slate-500 hover:text-slate-800"
               >
                 <X size={18} />
               </button>
 
-              <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center mx-auto mb-6">
+              <div className="w-12 h-12 rounded-xl bg-amber-50 border border-amber-100 text-amber-600 flex items-center justify-center mx-auto mb-6">
                 <CreditCard size={22} />
               </div>
 
-              <h3 className="text-lg font-bold text-white mb-2">Developer Payment Simulator</h3>
-              <p className="text-xs text-gray-400 leading-relaxed mb-6">
-                You are purchasing the <strong className="text-emerald-400 capitalize">{mockCheckout.plan}</strong> plan for <strong>{PLANS_LIST.find(p => p.id === mockCheckout.plan).price}</strong>.
+              <h3 className="text-lg font-bold text-slate-800 mb-2">Developer Payment Simulator</h3>
+              <p className="text-xs text-slate-500 leading-relaxed mb-6">
+                You are purchasing the <strong className="text-emerald-600 capitalize">{mockCheckout.plan}</strong> plan for <strong>{PLANS_LIST.find(p => p.id === mockCheckout.plan).price}</strong>.
               </p>
 
               <div className="space-y-3">
                 <button
                   onClick={handleMockSuccess}
                   disabled={verifyingPayment}
-                  className="w-full bg-emerald-500 hover:bg-emerald-600 text-black font-extrabold py-3.5 rounded-2xl transition disabled:opacity-50 text-xs cursor-pointer"
+                  className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold py-3.5 rounded-2xl transition disabled:opacity-50 text-xs cursor-pointer shadow-md"
                 >
                   {verifyingPayment ? "Processing Verification..." : "Simulate Successful Payment"}
                 </button>
@@ -233,7 +233,7 @@ const Pricing = () => {
                     setMockCheckout(null);
                   }}
                   disabled={verifyingPayment}
-                  className="w-full bg-gray-900 border border-gray-800 hover:border-red-900/40 text-red-400 font-semibold py-3.5 rounded-2xl transition text-xs cursor-pointer"
+                  className="w-full bg-white border border-slate-200 hover:border-red-500 hover:text-red-500 text-slate-500 font-semibold py-3.5 rounded-2xl transition text-xs cursor-pointer shadow-sm"
                 >
                   Simulate Cancellation
                 </button>
@@ -246,9 +246,9 @@ const Pricing = () => {
       {/* Verifying overlay (For Real Payments) */}
       <AnimatePresence>
         {verifyingPayment && !mockCheckout && (
-          <div className="fixed inset-0 z-50 bg-[#090d16]/80 backdrop-blur-sm flex flex-col items-center justify-center text-center">
-            <div className="w-12 h-12 rounded-full border-4 border-emerald-950/40 border-t-emerald-400 animate-spin mb-4" />
-            <p className="text-sm font-semibold text-white">Verifying transaction signature...</p>
+          <div className="fixed inset-0 z-50 bg-[#F8FAFC]/80 backdrop-blur-sm flex flex-col items-center justify-center text-center">
+            <div className="w-12 h-12 rounded-full border-4 border-emerald-100 border-t-emerald-500 animate-spin mb-4" />
+            <p className="text-sm font-semibold text-slate-800">Verifying transaction signature...</p>
           </div>
         )}
       </AnimatePresence>
@@ -256,14 +256,14 @@ const Pricing = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">Pricing Top-up plans</h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight">Pricing Top-up plans</h1>
+          <p className="text-sm text-slate-500 mt-1">
             Top up your account balance instantly. Unlock detailed Gemini reports.
           </p>
         </div>
 
         {/* Mapped stats */}
-        <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/10 text-emerald-400 text-sm font-bold shadow-md shadow-emerald-500/5">
+        <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-600 text-sm font-bold shadow-sm">
           <Coins size={16} className="text-amber-500" />
           <span>Active: {user.credits} Credits</span>
         </div>
@@ -280,26 +280,26 @@ const Pricing = () => {
               className={`p-8 rounded-[36px] border flex flex-col justify-between transition-all duration-300 relative overflow-hidden group ${plan.color}`}
             >
               {isPro && (
-                <span className="absolute top-4 right-6 bg-emerald-500 text-black text-[9px] uppercase font-black px-2.5 py-1 rounded-md tracking-wider">
+                <span className="absolute top-4 right-6 bg-emerald-500 text-white text-[9px] uppercase font-black px-2.5 py-1 rounded-md tracking-wider">
                   {plan.badge}
                 </span>
               )}
 
               <div>
-                <h3 className="text-xl font-bold text-gray-200 mb-2 leading-none">{plan.name}</h3>
+                <h3 className="text-xl font-bold text-slate-800 mb-2 leading-none">{plan.name}</h3>
                 <div className="flex items-baseline gap-1 mt-4">
-                  <span className={`text-4xl font-black ${isPro ? "text-emerald-400" : "text-white"}`}>
+                  <span className={`text-4xl font-black ${isPro ? "text-emerald-600" : "text-slate-800"}`}>
                     {plan.price}
                   </span>
-                  <span className="text-[10px] text-gray-500 font-semibold uppercase">one-time</span>
+                  <span className="text-[10px] text-slate-400 font-semibold uppercase">one-time</span>
                 </div>
 
-                <p className="text-gray-500 text-xs leading-relaxed mt-4 mb-6">{plan.desc}</p>
-                <div className="h-px bg-gray-900 mb-6" />
+                <p className="text-slate-500 text-xs leading-relaxed mt-4 mb-6">{plan.desc}</p>
+                <div className="h-px bg-slate-100 mb-6" />
 
                 <ul className="space-y-3 mb-8">
                   {plan.features.map((feat, idx) => (
-                    <li key={idx} className="flex items-center gap-2.5 text-xs text-gray-400">
+                    <li key={idx} className="flex items-center gap-2.5 text-xs text-slate-600">
                       <Check size={14} className="text-emerald-500 shrink-0" />
                       <span>{feat}</span>
                     </li>
@@ -310,10 +310,10 @@ const Pricing = () => {
               <button
                 onClick={() => handlePurchase(plan.id)}
                 disabled={loadingPlan !== null}
-                className={`w-full py-3.5 rounded-2xl text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-lg cursor-pointer ${
+                className={`w-full py-3.5 rounded-2xl text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-md cursor-pointer ${
                   isPro
-                    ? "bg-emerald-500 hover:bg-emerald-600 text-black shadow-emerald-500/15"
-                    : "bg-gray-900 border border-gray-800 text-gray-300 hover:bg-gray-800"
+                    ? "bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-500/15"
+                    : "bg-slate-900 text-white hover:bg-slate-800"
                 }`}
               >
                 <Zap size={13} fill="currentColor" />
@@ -325,14 +325,14 @@ const Pricing = () => {
       </div>
 
       {/* Transaction Security badges */}
-      <div className="w-full border border-gray-900 bg-gray-950/20 p-5 rounded-3xl flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="w-full border border-slate-200 bg-white p-5 rounded-3xl flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
         <div className="flex items-center gap-2.5">
-          <ShieldCheck size={20} className="text-emerald-400" />
-          <p className="text-xs text-gray-500 leading-normal">
+          <ShieldCheck size={20} className="text-emerald-500" />
+          <p className="text-xs text-slate-500 leading-normal">
             Transactions are secured and verified with <strong>Razorpay Payment Gateway</strong> cryptographic signatures.
           </p>
         </div>
-        <div className="flex items-center gap-4 text-xs font-semibold text-gray-600">
+        <div className="flex items-center gap-4 text-xs font-semibold text-slate-400">
           <span>Secure SSL</span>
           <span>&bull;</span>
           <span>Instant Crediting</span>

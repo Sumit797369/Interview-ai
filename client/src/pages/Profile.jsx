@@ -50,16 +50,16 @@ const Profile = () => {
     <div className="space-y-8 max-w-2xl mx-auto">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-extrabold text-white tracking-tight">My Profile</h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight">My Profile</h1>
+        <p className="text-sm text-slate-500 mt-1">
           Customize your dashboard display name, select avatars, and view account attributes.
         </p>
       </div>
 
       <form onSubmit={handleSave} className="space-y-6">
         {/* Avatar Select Widget */}
-        <div className="bg-gray-950/45 border border-gray-900 rounded-[32px] p-6 shadow-xl space-y-4">
-          <label className="text-xs font-bold text-gray-400 uppercase tracking-wide">Select Profile Avatar</label>
+        <div className="bg-white border border-slate-200 rounded-[32px] p-6 shadow-sm space-y-4">
+          <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">Select Profile Avatar</label>
           <div className="flex flex-col sm:flex-row items-center gap-6">
             {/* Current Avatar display */}
             <div className="relative group shrink-0">
@@ -70,7 +70,7 @@ const Profile = () => {
                   className="w-20 h-20 rounded-full object-cover ring-4 ring-emerald-500/20 shadow-lg"
                 />
               ) : (
-                <div className="w-20 h-20 rounded-full bg-emerald-950 text-emerald-400 flex items-center justify-center font-bold text-3xl shadow-lg ring-4 ring-emerald-500/10">
+                <div className="w-20 h-20 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-3xl shadow-lg ring-4 ring-emerald-500/10">
                   {name ? name[0].toUpperCase() : "U"}
                 </div>
               )}
@@ -93,7 +93,7 @@ const Profile = () => {
               <button
                 type="button"
                 onClick={() => setAvatar("")}
-                className="w-10 h-10 rounded-full bg-gray-900 text-gray-400 text-xs border border-gray-800 hover:text-white cursor-pointer"
+                className="w-10 h-10 rounded-full bg-slate-100 text-slate-500 text-xs border border-slate-200 hover:text-slate-700 cursor-pointer"
               >
                 Clear
               </button>
@@ -102,49 +102,49 @@ const Profile = () => {
         </div>
 
         {/* Mapped Fields Widget */}
-        <div className="bg-gray-950/45 border border-gray-900 rounded-[32px] p-6 shadow-xl space-y-4">
-          <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-4">Account Profile Fields</h4>
+        <div className="bg-white border border-slate-200 rounded-[32px] p-6 shadow-sm space-y-4">
+          <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-4">Account Profile Fields</h4>
 
           {/* Name Field */}
           <div className="space-y-1.5">
-            <label className="text-xs text-gray-500 pl-1">Full Name</label>
+            <label className="text-xs text-slate-400 pl-1">Full Name</label>
             <div className="relative">
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                className="w-full bg-gray-950/50 border border-gray-900 focus:border-emerald-500 rounded-2xl px-4 py-3 pl-11 outline-none text-sm font-semibold text-gray-200"
+                className="w-full bg-white border border-slate-200 focus:border-emerald-500 rounded-2xl px-4 py-3 pl-11 outline-none text-sm font-semibold text-slate-800"
               />
-              <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
+              <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
             </div>
           </div>
 
           {/* Email (Readonly) */}
           <div className="space-y-1.5">
-            <label className="text-xs text-gray-500 pl-1">Email Address (Read-only)</label>
+            <label className="text-xs text-slate-400 pl-1">Email Address (Read-only)</label>
             <div className="relative">
               <input
                 type="email"
                 value={user.email}
                 readOnly
-                className="w-full bg-gray-950/20 border border-gray-900/60 rounded-2xl px-4 py-3 pl-11 outline-none text-sm font-semibold text-gray-600 cursor-not-allowed"
+                className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 pl-11 outline-none text-sm font-semibold text-slate-400 cursor-not-allowed"
               />
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={16} />
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
             </div>
           </div>
 
           {/* Provider (Readonly) */}
           <div className="space-y-1.5">
-            <label className="text-xs text-gray-500 pl-1">Login Provider</label>
+            <label className="text-xs text-slate-400 pl-1">Login Provider</label>
             <div className="relative">
               <input
                 type="text"
                 value={user.provider === "google" ? "Google Authentication (Firebase)" : "Local Email / Password"}
                 readOnly
-                className="w-full bg-gray-950/20 border border-gray-900/60 rounded-2xl px-4 py-3 pl-11 outline-none text-sm font-semibold text-gray-600 cursor-not-allowed capitalize"
+                className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 pl-11 outline-none text-sm font-semibold text-slate-400 cursor-not-allowed capitalize"
               />
-              <Shield className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={16} />
+              <Shield className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
             </div>
           </div>
         </div>
@@ -153,7 +153,7 @@ const Profile = () => {
         <button
           type="submit"
           disabled={updating}
-          className="w-full bg-emerald-500 hover:bg-emerald-600 text-black font-extrabold py-3.5 rounded-2xl transition disabled:opacity-50 text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/15 cursor-pointer"
+          className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold py-3.5 rounded-2xl transition disabled:opacity-50 text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/15 cursor-pointer"
         >
           <Save size={14} /> {updating ? "Saving Profile..." : "Save Profile Details"}
         </button>

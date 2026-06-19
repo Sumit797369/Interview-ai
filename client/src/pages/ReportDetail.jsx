@@ -62,7 +62,7 @@ const SVGRadarChart = ({ scores }) => {
   const scorePath = `M ${scorePoints.map((p) => `${p.x},${p.y}`).join(" L ")} Z`;
 
   return (
-    <div className="w-full flex justify-center items-center py-4 bg-gray-950/20 border border-gray-900 rounded-3xl p-6">
+    <div className="w-full flex justify-center items-center py-4 bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
       <svg width={width} height={height} className="overflow-visible">
         {/* Draw outer grid lines */}
         {webPaths.map((path, idx) => (
@@ -70,7 +70,7 @@ const SVGRadarChart = ({ scores }) => {
             key={idx}
             d={path}
             fill="none"
-            stroke="#1f2937"
+            stroke="#e2e8f0"
             strokeWidth="0.5"
             strokeDasharray={idx === 4 ? "0" : "3"}
           />
@@ -86,7 +86,7 @@ const SVGRadarChart = ({ scores }) => {
               y1={cy}
               x2={outerPoint.x}
               y2={outerPoint.y}
-              stroke="#1f2937"
+              stroke="#e2e8f0"
               strokeWidth="0.75"
             />
           );
@@ -110,13 +110,13 @@ const SVGRadarChart = ({ scores }) => {
           return (
             <g key={idx}>
               {/* Score dot */}
-              <circle cx={pt.x} cy={pt.y} r="4" fill="#090d16" stroke="#10b981" strokeWidth="2" />
+              <circle cx={pt.x} cy={pt.y} r="4" fill="#F8FAFC" stroke="#10b981" strokeWidth="2" />
 
               {/* Label */}
               <text
                 x={outerPt.x}
                 y={outerPt.y + 4}
-                fill="#9ca3af"
+                fill="#64748b"
                 fontSize="9"
                 fontWeight="650"
                 textAnchor="middle"
@@ -170,25 +170,25 @@ const ReportDetail = () => {
   if (loading) {
     return (
       <div className="space-y-8 animate-pulse">
-        <div className="h-8 w-48 bg-gray-900 rounded-lg" />
+        <div className="h-8 w-48 bg-slate-200 rounded-lg" />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="h-44 bg-gray-950/60 rounded-3xl md:col-span-1" />
-          <div className="h-44 bg-gray-950/60 rounded-3xl md:col-span-2" />
+          <div className="h-44 bg-white border border-slate-200 rounded-3xl md:col-span-1" />
+          <div className="h-44 bg-white border border-slate-200 rounded-3xl md:col-span-2" />
         </div>
-        <div className="h-72 bg-gray-950/60 rounded-3xl" />
+        <div className="h-72 bg-white border border-slate-200 rounded-3xl" />
       </div>
     );
   }
 
   if (!interview || !interview.report) {
     return (
-      <div className="text-center py-20 bg-gray-950/20 border border-gray-900 rounded-3xl p-8">
-        <AlertTriangle className="text-amber-400 mx-auto mb-4" size={36} />
-        <p className="text-gray-300 font-semibold mb-2">Evaluation details not compiled yet</p>
-        <p className="text-xs text-gray-500 max-w-sm mx-auto mb-6">
+      <div className="text-center py-20 bg-white border border-slate-200 rounded-3xl p-8 shadow-sm">
+        <AlertTriangle className="text-amber-500 mx-auto mb-4" size={36} />
+        <p className="text-slate-800 font-semibold mb-2">Evaluation details not compiled yet</p>
+        <p className="text-xs text-slate-400 max-w-sm mx-auto mb-6">
           This interview has not been evaluated by the AI agent yet. Please complete the interview first.
         </p>
-        <Link to="/dashboard" className="text-emerald-400 font-bold hover:underline">
+        <Link to="/dashboard" className="text-emerald-500 font-bold hover:underline">
           Return to Dashboard
         </Link>
       </div>
@@ -227,23 +227,23 @@ const ReportDetail = () => {
         <div className="flex items-center gap-3">
           <Link
             to="/dashboard/history"
-            className="text-gray-500 hover:text-white p-2 rounded-xl bg-gray-950/45 border border-gray-900"
+            className="text-slate-500 hover:text-slate-800 p-2 rounded-xl bg-white border border-slate-200 shadow-sm"
           >
             <ArrowLeft size={16} />
           </Link>
           <div>
-            <h1 className="text-3xl font-extrabold text-white tracking-tight">AI Evaluation Report</h1>
-            <p className="text-xs text-gray-500 mt-1">
-              Category: <strong className="text-gray-300 capitalize">{type}</strong> &bull;
-              Difficulty: <strong className="text-gray-300 capitalize">{difficulty}</strong> &bull;
-              Date: <strong className="text-gray-300">{new Date(createdAt).toLocaleDateString()}</strong>
+            <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight">AI Evaluation Report</h1>
+            <p className="text-xs text-slate-400 mt-1">
+              Category: <strong className="text-slate-700 capitalize">{type}</strong> &bull;
+              Difficulty: <strong className="text-slate-700 capitalize">{difficulty}</strong> &bull;
+              Date: <strong className="text-slate-700">{new Date(createdAt).toLocaleDateString()}</strong>
             </p>
           </div>
         </div>
 
         <button
           onClick={handlePrint}
-          className="w-full sm:w-auto bg-gray-950/60 hover:bg-gray-900 border border-gray-800 text-gray-300 font-semibold py-3 px-5 rounded-2xl transition flex items-center justify-center gap-2 text-sm cursor-pointer"
+          className="w-full sm:w-auto bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-semibold py-3 px-5 rounded-2xl transition flex items-center justify-center gap-2 text-sm cursor-pointer shadow-sm"
         >
           <Printer size={16} /> Print Report
         </button>
@@ -262,14 +262,14 @@ const ReportDetail = () => {
       {/* Main Score Breakdown Layout Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Radial Score Gauge Card */}
-        <div className="bg-gray-950/45 border border-gray-900 rounded-[32px] p-6 shadow-xl flex flex-col items-center justify-center text-center print:border print:bg-white print:text-black">
-          <h4 className="text-xs font-bold text-gray-500 tracking-wider uppercase mb-6">Overall Score</h4>
+        <div className="bg-white border border-slate-200 rounded-[32px] p-6 shadow-sm flex flex-col items-center justify-center text-center print:border print:bg-white print:text-black">
+          <h4 className="text-xs font-bold text-slate-400 tracking-wider uppercase mb-6">Overall Score</h4>
 
           <div className="relative w-40 h-40 flex items-center justify-center">
             {/* SVG radial ring */}
             <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
               {/* Outer background circle */}
-              <circle cx="50" cy="50" r="42" stroke="#1f2937" strokeWidth="6" fill="transparent" className="print:stroke-gray-200" />
+              <circle cx="50" cy="50" r="42" stroke="#e2e8f0" strokeWidth="6" fill="transparent" className="print:stroke-gray-200" />
               {/* Dynamic progress circle */}
               <circle
                 cx="50"
@@ -287,59 +287,59 @@ const ReportDetail = () => {
               <span className={`text-4xl font-black ${getScoreColor(report.score)} print:text-black`}>
                 {report.score}
               </span>
-              <span className="text-[10px] text-gray-500 mt-1 uppercase font-bold tracking-wider">Out of 100</span>
+              <span className="text-[10px] text-slate-400 mt-1 uppercase font-bold tracking-wider">Out of 100</span>
             </div>
           </div>
 
           <div className="mt-6">
-            <span className="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/10 print:text-black print:border-black">
+            <span className="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100 print:text-black print:border-black">
               {report.score >= 80 ? "EXCELLENT PERFORMER" : report.score >= 60 ? "SOLID / READY" : "IMPROVEMENT NEEDED"}
             </span>
           </div>
         </div>
 
         {/* Radar Chart Card */}
-        <div className="bg-gray-950/45 border border-gray-900 rounded-[32px] p-6 shadow-xl flex flex-col justify-between print:border print:bg-white print:text-black">
-          <h4 className="text-xs font-bold text-gray-500 tracking-wider uppercase mb-2">Metrics Web</h4>
+        <div className="bg-white border border-slate-200 rounded-[32px] p-6 shadow-sm flex flex-col justify-between print:border print:bg-white print:text-black">
+          <h4 className="text-xs font-bold text-slate-400 tracking-wider uppercase mb-2">Metrics Web</h4>
           <SVGRadarChart scores={radarScores} />
         </div>
 
         {/* Executive summary card */}
-        <div className="bg-gray-950/45 border border-gray-900 rounded-[32px] p-6 shadow-xl flex flex-col justify-between print:border print:bg-white print:text-black">
+        <div className="bg-white border border-slate-200 rounded-[32px] p-6 shadow-sm flex flex-col justify-between print:border print:bg-white print:text-black">
           <div>
-            <h4 className="text-xs font-bold text-gray-500 tracking-wider uppercase mb-4">Executive Performance Summary</h4>
-            <p className="text-xs text-gray-400 leading-relaxed print:text-black">{report.overallPerformance}</p>
+            <h4 className="text-xs font-bold text-slate-400 tracking-wider uppercase mb-4">Executive Performance Summary</h4>
+            <p className="text-xs text-slate-600 leading-relaxed print:text-black">{report.overallPerformance}</p>
           </div>
-          <div className="h-px bg-gray-900 my-4 print:bg-gray-200" />
-          <div className="flex justify-between text-xs text-gray-500">
+          <div className="h-px bg-slate-100 my-4 print:bg-gray-200" />
+          <div className="flex justify-between text-xs text-slate-500">
             <span>Interview Duration:</span>
-            <span className="font-bold text-gray-300 print:text-black">{formatDuration(duration)}</span>
+            <span className="font-bold text-slate-700 print:text-black">{formatDuration(duration)}</span>
           </div>
         </div>
       </div>
 
       {/* Detailed Category Breakdown Cards */}
-      <div className="bg-gray-950/25 border border-gray-900 rounded-[32px] p-6 shadow-xl space-y-6 print:border print:bg-white print:text-black">
-        <h3 className="text-base font-bold text-white flex items-center gap-2 border-b border-gray-900 pb-4 print:text-black print:border-gray-200">
-          <MessageSquare size={18} className="text-emerald-400" /> Category Breakdown
+      <div className="bg-white border border-slate-200 rounded-[32px] p-6 shadow-sm space-y-6 print:border print:bg-white print:text-black">
+        <h3 className="text-base font-bold text-slate-800 flex items-center gap-2 border-b border-slate-100 pb-4 print:text-black print:border-gray-200">
+          <MessageSquare size={18} className="text-emerald-500" /> Category Breakdown
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-1">
-            <h4 className="text-xs font-bold text-gray-400 print:text-black">Communication Flow</h4>
-            <p className="text-xs text-gray-500 leading-relaxed print:text-black">{report.communication}</p>
+            <h4 className="text-xs font-bold text-slate-700 print:text-black">Communication Flow</h4>
+            <p className="text-xs text-slate-600 leading-relaxed print:text-black">{report.communication}</p>
           </div>
           <div className="space-y-1">
-            <h4 className="text-xs font-bold text-gray-400 print:text-black">Technical Depth & Accuracy</h4>
-            <p className="text-xs text-gray-500 leading-relaxed print:text-black">{report.technicalKnowledge}</p>
+            <h4 className="text-xs font-bold text-slate-700 print:text-black">Technical Depth & Accuracy</h4>
+            <p className="text-xs text-slate-600 leading-relaxed print:text-black">{report.technicalKnowledge}</p>
           </div>
           <div className="space-y-1">
-            <h4 className="text-xs font-bold text-gray-400 print:text-black">Confidence Indicators</h4>
-            <p className="text-xs text-gray-500 leading-relaxed print:text-black">{report.confidence}</p>
+            <h4 className="text-xs font-bold text-slate-700 print:text-black">Confidence Indicators</h4>
+            <p className="text-xs text-slate-600 leading-relaxed print:text-black">{report.confidence}</p>
           </div>
           <div className="space-y-1">
-            <h4 className="text-xs font-bold text-gray-400 print:text-black">Problem Solving & Logic</h4>
-            <p className="text-xs text-gray-500 leading-relaxed print:text-black">{report.problemSolving}</p>
+            <h4 className="text-xs font-bold text-slate-700 print:text-black">Problem Solving & Logic</h4>
+            <p className="text-xs text-slate-600 leading-relaxed print:text-black">{report.problemSolving}</p>
           </div>
         </div>
       </div>
@@ -347,16 +347,16 @@ const ReportDetail = () => {
       {/* Action Plan Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Strengths & Weaknesses */}
-        <div className="bg-gray-950/25 border border-gray-900 rounded-[32px] p-6 shadow-xl space-y-5 print:border print:bg-white print:text-black">
-          <h4 className="text-sm font-bold text-white border-b border-gray-900 pb-3 flex items-center gap-2 print:text-black print:border-gray-200">
-            <ThumbsUp size={16} className="text-emerald-400" /> Core Feedback Areas
+        <div className="bg-white border border-slate-200 rounded-[32px] p-6 shadow-sm space-y-5 print:border print:bg-white print:text-black">
+          <h4 className="text-sm font-bold text-slate-800 border-b border-slate-100 pb-3 flex items-center gap-2 print:text-black print:border-gray-200">
+            <ThumbsUp size={16} className="text-emerald-500" /> Core Feedback Areas
           </h4>
           <div className="space-y-4">
             <div>
-              <p className="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-2">Strengths</p>
+              <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-2">Strengths</p>
               <ul className="space-y-2">
                 {report.strengths.map((s, i) => (
-                  <li key={i} className="flex items-start gap-2 text-xs text-gray-400 leading-relaxed print:text-black">
+                  <li key={i} className="flex items-start gap-2 text-xs text-slate-600 leading-relaxed print:text-black">
                     <CheckCircle size={14} className="text-emerald-500 shrink-0 mt-0.5" />
                     <span>{s}</span>
                   </li>
@@ -365,10 +365,10 @@ const ReportDetail = () => {
             </div>
 
             <div>
-              <p className="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-2">Improvement Areas</p>
+              <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-2">Improvement Areas</p>
               <ul className="space-y-2">
                 {report.weakAreas.map((w, i) => (
-                  <li key={i} className="flex items-start gap-2 text-xs text-gray-400 leading-relaxed print:text-black">
+                  <li key={i} className="flex items-start gap-2 text-xs text-slate-600 leading-relaxed print:text-black">
                     <AlertTriangle size={14} className="text-amber-500 shrink-0 mt-0.5" />
                     <span>{w}</span>
                   </li>
@@ -379,17 +379,17 @@ const ReportDetail = () => {
         </div>
 
         {/* Suggestions & Learning Path */}
-        <div className="bg-gray-950/25 border border-gray-900 rounded-[32px] p-6 shadow-xl space-y-5 print:border print:bg-white print:text-black">
-          <h4 className="text-sm font-bold text-white border-b border-gray-900 pb-3 flex items-center gap-2 print:text-black print:border-gray-200">
-            <BookOpen size={16} className="text-emerald-400" /> Actionable Study Roadmap
+        <div className="bg-white border border-slate-200 rounded-[32px] p-6 shadow-sm space-y-5 print:border print:bg-white print:text-black">
+          <h4 className="text-sm font-bold text-slate-800 border-b border-slate-100 pb-3 flex items-center gap-2 print:text-black print:border-gray-200">
+            <BookOpen size={16} className="text-emerald-500" /> Actionable Study Roadmap
           </h4>
           <div className="space-y-4">
             <div>
-              <p className="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-2">Specific Suggestions</p>
+              <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-2">Specific Suggestions</p>
               <ul className="space-y-2">
                 {report.suggestions.map((s, i) => (
-                  <li key={i} className="flex items-start gap-2.5 text-xs text-gray-400 leading-relaxed print:text-black">
-                    <Sparkles size={14} className="text-emerald-400 shrink-0 mt-0.5 animate-pulse" />
+                  <li key={i} className="flex items-start gap-2.5 text-xs text-slate-600 leading-relaxed print:text-black">
+                    <Sparkles size={14} className="text-emerald-500 shrink-0 mt-0.5 animate-pulse" />
                     <span>{s}</span>
                   </li>
                 ))}
@@ -397,11 +397,11 @@ const ReportDetail = () => {
             </div>
 
             <div>
-              <p className="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-2">Recommended Learning Path</p>
+              <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-2">Recommended Learning Path</p>
               <ul className="space-y-2">
                 {report.recommendedLearningPath.map((item, i) => (
-                  <li key={i} className="flex items-start gap-2.5 text-xs text-gray-400 leading-normal print:text-black">
-                    <span className="w-4 h-4 rounded-full bg-emerald-950/50 border border-emerald-900/30 text-emerald-400 flex items-center justify-center text-[9px] font-bold shrink-0 mt-0.5 print:text-black print:border-gray-300">
+                  <li key={i} className="flex items-start gap-2.5 text-xs text-slate-600 leading-normal print:text-black">
+                    <span className="w-4 h-4 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center text-[9px] font-bold shrink-0 mt-0.5 print:text-black print:border-gray-300">
                       {i + 1}
                     </span>
                     <span>{item}</span>
@@ -414,23 +414,23 @@ const ReportDetail = () => {
       </div>
 
       {/* Transcript Review Q&A Accordion */}
-      <div className="bg-gray-950/25 border border-gray-900 rounded-[32px] p-6 shadow-xl space-y-6 print:border print:bg-white print:text-black">
-        <h3 className="text-base font-bold text-white border-b border-gray-900 pb-4 flex items-center gap-2 print:text-black print:border-gray-200">
-          <Brain size={18} className="text-emerald-400" /> Interview Transcript Review
+      <div className="bg-white border border-slate-200 rounded-[32px] p-6 shadow-sm space-y-6 print:border print:bg-white print:text-black">
+        <h3 className="text-base font-bold text-slate-800 border-b border-slate-100 pb-4 flex items-center gap-2 print:text-black print:border-gray-200">
+          <Brain size={18} className="text-emerald-500" /> Interview Transcript Review
         </h3>
 
         <div className="space-y-3 print:space-y-6">
           {questions.map((q, idx) => (
             <div
               key={q.questionId}
-              className="border border-gray-900 rounded-2xl bg-gray-950/20 overflow-hidden transition-all duration-200 print:border-0 print:border-b print:pb-4"
+              className="border border-slate-200 rounded-2xl bg-white overflow-hidden transition-all duration-200 print:border-0 print:border-b print:pb-4 shadow-sm"
             >
               <button
                 onClick={() => setExpandedIndex(expandedIndex === idx ? null : idx)}
-                className="w-full text-left px-5 py-4 flex items-center justify-between font-semibold text-gray-300 hover:text-white transition cursor-pointer print:cursor-default print:hover:text-black print:text-black print:p-0"
+                className="w-full text-left px-5 py-4 flex items-center justify-between font-semibold text-slate-700 hover:text-slate-900 transition cursor-pointer print:cursor-default print:hover:text-black print:text-black print:p-0"
               >
                 <div className="flex items-start gap-3 text-xs leading-normal pr-4">
-                  <span className="w-5 h-5 rounded-full bg-emerald-950 border border-emerald-900/30 text-emerald-400 flex items-center justify-center font-bold text-[9px] shrink-0 mt-0.5 print:text-black print:border-gray-300">
+                  <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-[9px] shrink-0 mt-0.5 print:text-black print:border-gray-300">
                     {idx + 1}
                   </span>
                   <span>{q.questionText}</span>
@@ -438,13 +438,13 @@ const ReportDetail = () => {
               </button>
 
               <div
-                className={`px-5 pb-5 pt-1 text-xs leading-relaxed border-t border-gray-900 space-y-3 print:block print:border-t-0 print:p-0 print:pt-2 ${
+                className={`px-5 pb-5 pt-1 text-xs leading-relaxed border-t border-slate-100 space-y-3 print:block print:border-t-0 print:p-0 print:pt-2 ${
                   expandedIndex === idx || window.matchMedia("print").matches ? "block" : "hidden"
                 }`}
               >
                 <div>
-                  <span className="text-[10px] text-gray-600 uppercase font-black print:text-gray-400">Your Answer:</span>
-                  <p className="text-gray-400 mt-1 pl-2 border-l border-emerald-500/20 print:text-black print:border-gray-300">
+                  <span className="text-[10px] text-slate-400 uppercase font-black print:text-gray-400">Your Answer:</span>
+                  <p className="text-slate-600 mt-1 pl-2 border-l border-emerald-500/30 print:text-black print:border-gray-300">
                     {q.userAnswer || "[No response was provided for this question]"}
                   </p>
                 </div>

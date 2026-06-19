@@ -76,20 +76,20 @@ const Settings = () => {
     <div className="space-y-8 max-w-2xl mx-auto">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-extrabold text-white tracking-tight">Account Settings</h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight">Account Settings</h1>
+        <p className="text-sm text-slate-500 mt-1">
           Configure security credentials, set UI themes, and manage your account status.
         </p>
       </div>
 
       {/* Change Password Panel */}
-      <div className="bg-gray-950/45 border border-gray-900 rounded-[32px] p-6 shadow-xl space-y-6">
-        <h4 className="text-sm font-bold text-white flex items-center gap-2 border-b border-gray-900 pb-3 leading-none">
-          <KeyRound size={16} className="text-emerald-400" /> Update Password
+      <div className="bg-white border border-slate-200 rounded-[32px] p-6 shadow-sm space-y-6">
+        <h4 className="text-sm font-bold text-slate-800 flex items-center gap-2 border-b border-slate-100 pb-3 leading-none">
+          <KeyRound size={16} className="text-emerald-500" /> Update Password
         </h4>
 
         {user.provider === "google" ? (
-          <div className="flex gap-3 bg-blue-950/15 border border-blue-900/30 p-4 rounded-2xl text-xs text-blue-400">
+          <div className="flex gap-3 bg-blue-50 border border-blue-100 p-4 rounded-2xl text-xs text-blue-600">
             <Moon size={16} className="shrink-0 mt-0.5" />
             <p className="leading-relaxed">
               Your account is registered using <strong>Google Sign-In</strong>. Passwords are managed directly by Google security portals.
@@ -99,44 +99,44 @@ const Settings = () => {
           <form onSubmit={handlePasswordChange} className="space-y-4">
             {/* Old Password */}
             <div className="space-y-1.5">
-              <label className="text-xs text-gray-500 pl-1">Current Password</label>
+              <label className="text-xs text-slate-400 pl-1">Current Password</label>
               <input
                 type="password"
                 required
                 value={oldPassword}
                 onChange={(e) => setOldPassword(e.target.value)}
-                className="w-full bg-gray-950/50 border border-gray-900 focus:border-emerald-500 rounded-2xl px-4 py-3 outline-none text-sm font-semibold text-gray-200"
+                className="w-full bg-white border border-slate-200 focus:border-emerald-500 rounded-2xl px-4 py-3 outline-none text-sm font-semibold text-slate-800"
               />
             </div>
 
             {/* New Password */}
             <div className="space-y-1.5">
-              <label className="text-xs text-gray-500 pl-1">New Password (Min 6 chars)</label>
+              <label className="text-xs text-slate-400 pl-1">New Password (Min 6 chars)</label>
               <input
                 type="password"
                 required
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                className="w-full bg-gray-950/50 border border-gray-900 focus:border-emerald-500 rounded-2xl px-4 py-3 outline-none text-sm font-semibold text-gray-200"
+                className="w-full bg-white border border-slate-200 focus:border-emerald-500 rounded-2xl px-4 py-3 outline-none text-sm font-semibold text-slate-800"
               />
             </div>
 
             {/* Confirm New Password */}
             <div className="space-y-1.5">
-              <label className="text-xs text-gray-500 pl-1">Confirm New Password</label>
+              <label className="text-xs text-slate-400 pl-1">Confirm New Password</label>
               <input
                 type="password"
                 required
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full bg-gray-950/50 border border-gray-900 focus:border-emerald-500 rounded-2xl px-4 py-3 outline-none text-sm font-semibold text-gray-200"
+                className="w-full bg-white border border-slate-200 focus:border-emerald-500 rounded-2xl px-4 py-3 outline-none text-sm font-semibold text-slate-800"
               />
             </div>
 
             <button
               type="submit"
               disabled={updatingPassword}
-              className="bg-emerald-500 hover:bg-emerald-600 text-black font-extrabold px-6 py-3 rounded-2xl transition disabled:opacity-50 text-xs flex items-center gap-1 cursor-pointer"
+              className="bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold px-6 py-3 rounded-2xl transition disabled:opacity-50 text-xs flex items-center gap-1 cursor-pointer"
             >
               Update Security Password
             </button>
@@ -145,40 +145,40 @@ const Settings = () => {
       </div>
 
       {/* Theme Settings Panel */}
-      <div className="bg-gray-950/45 border border-gray-900 rounded-[32px] p-6 shadow-xl space-y-4">
-        <h4 className="text-sm font-bold text-white flex items-center gap-2 leading-none">
-          <Moon size={16} className="text-emerald-400" /> Theme Preference
+      <div className="bg-white border border-slate-200 rounded-[32px] p-6 shadow-sm space-y-4">
+        <h4 className="text-sm font-bold text-slate-800 flex items-center gap-2 leading-none">
+          <Moon size={16} className="text-emerald-500" /> Theme Preference
         </h4>
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs font-semibold text-gray-300">Dark Mode First</p>
-            <p className="text-[10px] text-gray-500 mt-1 max-w-[320px]">
-              IntervuAI uses a SaaS dark theme design system by default for optimal code-reading ergonomics.
+            <p className="text-xs font-semibold text-slate-700">Light Mode First</p>
+            <p className="text-[10px] text-slate-400 mt-1 max-w-[320px]">
+              IntervuAI uses a SaaS light theme design system by default for optimal code-reading ergonomics.
             </p>
           </div>
-          <span className="text-[10px] font-bold uppercase bg-emerald-500/10 border border-emerald-500/10 text-emerald-400 px-3 py-1.5 rounded-xl">
+          <span className="text-[10px] font-bold uppercase bg-emerald-50 border border-emerald-100 text-emerald-600 px-3 py-1.5 rounded-xl">
             Active
           </span>
         </div>
       </div>
 
       {/* Danger Zone Panel */}
-      <div className="bg-gray-950/45 border border-red-950/45 rounded-[32px] p-6 shadow-xl space-y-5">
-        <h4 className="text-sm font-bold text-red-400 flex items-center gap-2 border-b border-red-950/30 pb-3 leading-none">
+      <div className="bg-white border border-red-200 rounded-[32px] p-6 shadow-sm space-y-5">
+        <h4 className="text-sm font-bold text-red-600 flex items-center gap-2 border-b border-red-100 pb-3 leading-none">
           <AlertOctagon size={16} /> Danger Zone
         </h4>
 
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">
-            <p className="text-xs font-bold text-red-200">Delete Account Permanently</p>
-            <p className="text-[10px] text-gray-500 leading-normal max-w-sm">
+            <p className="text-xs font-bold text-red-700">Delete Account Permanently</p>
+            <p className="text-[10px] text-slate-400 leading-normal max-w-sm">
               Delete your profile and all associated analyzed resumes, credit transactions, mock interview rooms, and feedbacks.
             </p>
           </div>
 
           <button
             onClick={handleDeleteAccount}
-            className="w-full sm:w-auto bg-red-950/20 border border-red-900 hover:bg-red-500 hover:text-white text-red-400 font-bold py-3.5 px-6 rounded-2xl text-xs transition cursor-pointer"
+            className="w-full sm:w-auto bg-red-50 border border-red-200 hover:bg-red-600 hover:text-white text-red-600 font-bold py-3.5 px-6 rounded-2xl text-xs transition cursor-pointer"
           >
             Delete Account
           </button>
