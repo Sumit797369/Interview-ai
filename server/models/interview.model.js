@@ -83,7 +83,7 @@ const interviewSchema = new mongoose.Schema(
       enum: ["technical", "hr", "mixed"],
       required: true,
     },
-    difficulty: {
+        difficulty: {
       type: String,
       enum: ["beginner", "intermediate", "advanced"],
       required: true,
@@ -91,6 +91,11 @@ const interviewSchema = new mongoose.Schema(
     length: {
       type: Number,
       required: true,
+    },
+    interviewerGender: {
+      type: String,
+      enum: ["female", "male"],
+      default: "female",
     },
     status: {
       type: String,

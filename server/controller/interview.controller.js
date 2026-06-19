@@ -24,7 +24,7 @@ const parseGeminiJson = (text) => {
 
 export const generateInterview = async (req, res) => {
   try {
-    const { type, difficulty, length } = req.body;
+    const { type, difficulty, length, interviewerGender } = req.body;
     let { resumeId } = req.body;
 
     // 1. Fetch user to check credits
@@ -115,6 +115,7 @@ export const generateInterview = async (req, res) => {
       type,
       difficulty,
       length,
+      interviewerGender: interviewerGender || "female",
       questions: formattedQuestions,
       status: "active",
     });

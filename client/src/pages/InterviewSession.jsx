@@ -15,8 +15,14 @@ import {
   Check,
   Bot,
   Sparkles,
+  Mic,
+  MicOff,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 import { toast } from "react-toastify";
+import femaleVideo from "../assets/Videos/female-ai.mp4";
+import maleVideo from "../assets/Videos/male-ai.mp4";
 
 const InterviewSession = () => {
   const { id } = useParams();
@@ -29,6 +35,9 @@ const InterviewSession = () => {
   const [answers, setAnswers] = useState({}); // mapped by questionId: answerText
   const [saving, setSaving] = useState(false);
   const [evaluating, setEvaluating] = useState(false);
+  const [isSpeechEnabled, setIsSpeechEnabled] = useState(true);
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef(null);
 
   // Time tracker
   const [secondsElapsed, setSecondsElapsed] = useState(0);
@@ -82,6 +91,122 @@ const InterviewSession = () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
   }, [interview, evaluating]);
+
+  // AI Speech Synthesis
+  const speakQuestion = (text) => {
+    if (!("speechSynthesis" in window)) return;
+    
+    // Cancel active speech
+    window.speechSynthesis.cancel();
+
+    if (!isSpeechEnabled || !text) return;
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.95;
+    utterance.pitch = 1.0;
+
+    // Asynchronously retrieve voices and assign
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length > 0) {
+      const preferredGender = interview?.interviewerGender === "male" ? "male" : "female";
+      const matchingVoice = voices.find((v) => {
+        const name = v.name.toLowerCase();
+        return (
+          name.includes(preferredGender) ||
+          (preferredGender === "female" && (name.includes("zira") || name.includes("samantha") || name.includes("hazel") || name.includes("microsoft google"))) ||
+          (preferredGender === "male" && (name.includes("david") || name.includes("mark")))
+        );
+      });
+      if (matchingVoice) utterance.voice = matchingVoice;
+    }
+
+    window.speechSynthesis.speak(utterance);
+  };
+
+  // Trigger speech synthesis on question load
+  useEffect(() => {
+    if (interview && interview.questions && interview.questions[activeIndex]) {
+      const timer = setTimeout(() => {
+        speakQuestion(interview.questions[activeIndex].questionText);
+      }, 600);
+      return () => clearTimeout(timer);
+    }
+  }, [activeIndex, interview, isSpeechEnabled]);
+
+  // Clean up synthesis on unmount
+  useEffect(() => {
+    return () => {
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
+
+  // Speech Recognition Setup
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) return;
+
+    const rec = new SpeechRecognition();
+    rec.continuous = true;
+    rec.interimResults = false;
+    rec.lang = "en-US";
+
+    rec.onstart = () => {
+      setIsListening(true);
+      toast.info("Microphone active. Start speaking…", { autoClose: 2000 });
+    };
+
+    rec.onresult = (event) => {
+      const transcript = event.results[event.results.length - 1][0].transcript;
+      if (transcript.trim() && interview && interview.questions) {
+        const activeQuestion = interview.questions[activeIndex];
+        setAnswers((prev) => {
+          const currentVal = prev[activeQuestion.questionId] || "";
+          const newVal = currentVal ? `${currentVal.trim()} ${transcript.trim()}` : transcript.trim();
+          return {
+            ...prev,
+            [activeQuestion.questionId]: newVal,
+          };
+        });
+      }
+    };
+
+    rec.onerror = (event) => {
+      console.error("Speech recognition error:", event.error);
+      setIsListening(false);
+      if (event.error === "not-allowed") {
+        toast.error("Microphone access denied. Please allow microphone permissions in your browser.");
+      } else {
+        toast.error(`Voice input error: ${event.error}`);
+      }
+    };
+
+    rec.onend = () => {
+      setIsListening(false);
+    };
+
+    recognitionRef.current = rec;
+
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.abort();
+      }
+    };
+  }, [interview, activeIndex]);
+
+  const toggleListening = () => {
+    if (!recognitionRef.current) {
+      toast.warn("Speech recognition is not supported in your browser. Please try Google Chrome or Microsoft Edge.");
+      return;
+    }
+
+    if (isListening) {
+      recognitionRef.current.stop();
+    } else {
+      recognitionRef.current.start();
+    }
+  };
 
   const formatTime = (totalSecs) => {
     const mins = Math.floor(totalSecs / 60);
@@ -243,19 +368,28 @@ const InterviewSession = () => {
               const isActive = idx === activeIndex;
 
               return (
-                <button
+                <motion.button
                   key={q.questionId}
                   onClick={() => handleNavigate(idx)}
-                  className={`w-full text-left p-3.5 rounded-2xl border transition-all duration-200 flex items-start gap-3 cursor-pointer ${
-                    isActive
-                      ? "bg-emerald-50 border-emerald-500 text-slate-800 font-semibold"
-                      : "bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-800"
-                  }`}
+                  whileHover={{ scale: 1.015 }}
+                  whileTap={{ scale: 0.985 }}
+                  className="w-full text-left p-4 rounded-2xl border transition-all duration-300 flex items-start gap-3 cursor-pointer relative overflow-hidden"
+                  style={{
+                    backgroundColor: isActive ? "transparent" : "#fff",
+                    borderColor: isActive ? "transparent" : "#e2e8f0",
+                  }}
                 >
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeTimelineBg"
+                      className="absolute inset-0 bg-gradient-to-r from-emerald-50/90 to-teal-50/20 border-2 border-emerald-500 rounded-2xl -z-10"
+                      transition={{ type: "spring", stiffness: 380, damping: 25 }}
+                    />
+                  )}
                   <span
-                    className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] shrink-0 mt-0.5 font-bold ${
+                    className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] shrink-0 mt-0.5 font-bold transition-colors duration-200 ${
                       isActive
-                        ? "bg-emerald-500 text-white"
+                        ? "bg-emerald-500 text-white shadow-md shadow-emerald-500/20"
                         : isCompleted
                         ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
                         : "bg-slate-100 text-slate-400"
@@ -263,8 +397,10 @@ const InterviewSession = () => {
                   >
                     {isCompleted && !isActive ? <Check size={10} className="stroke-[3]" /> : idx + 1}
                   </span>
-                  <span className="text-xs leading-normal truncate">{q.questionText}</span>
-                </button>
+                  <span className={`text-xs leading-normal truncate ${isActive ? "text-slate-800 font-semibold" : "text-slate-500"}`}>
+                    {q.questionText}
+                  </span>
+                </motion.button>
               );
             })}
           </div>
@@ -272,77 +408,200 @@ const InterviewSession = () => {
 
         {/* Center column: active question input */}
         <main className="flex-1 bg-white border border-slate-200 rounded-[32px] p-6 md:p-8 flex flex-col justify-between h-full overflow-y-auto relative shadow-sm">
-          <div className="space-y-6">
-            {/* Question Card */}
-            <div className="bg-slate-50 border border-slate-100 p-5 rounded-3xl relative overflow-hidden">
-              <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Question {activeIndex + 1} of {interview.questions.length}</span>
-              <h2 className="text-lg font-bold text-slate-800 mt-2 leading-relaxed">
-                {currentQ.questionText}
-              </h2>
-            </div>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeIndex}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.22, ease: "easeInOut" }}
+              className="space-y-6 flex-1 flex flex-col justify-between"
+            >
+              <div className="space-y-6">
+                {/* Question Card & Video Avatar Split */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 bg-slate-50 border border-slate-100 p-6 rounded-3xl relative overflow-hidden">
+                  {/* Video Avatar Section */}
+                  <div className="lg:col-span-4 relative rounded-2xl overflow-hidden bg-slate-900 aspect-video lg:aspect-[4/3] flex items-center justify-center border border-slate-200 shadow-inner group">
+                    <video
+                      key={interview.interviewerGender} // Force re-render if gender updates
+                      src={interview.interviewerGender === "male" ? maleVideo : femaleVideo}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover"
+                    />
+                    
+                    {/* Glowing Live Overlay */}
+                    <div className="absolute top-3 left-3 flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-slate-700/60 shadow-lg">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping absolute" />
+                      <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                      <span className="text-[10px] font-bold text-slate-100 uppercase tracking-widest leading-none">
+                        {interview.interviewerGender === "male" ? "David (AI)" : "Sophia (AI)"}
+                      </span>
+                    </div>
 
-            {/* Answer Input */}
-            <div className="space-y-2 relative">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-wide px-1">Your Response</label>
-              <textarea
-                value={currentAnswer}
-                onChange={handleTextChange}
-                placeholder="Structure your answer clearly. Explain key terms, projects, methodologies, and edge cases where applicable..."
-                className="w-full min-h-[180px] bg-white border border-slate-200 rounded-3xl p-5 text-sm outline-none focus:border-emerald-500 text-slate-800 leading-relaxed resize-none"
-              />
+                    {/* Simulated voice/equalizer status footer overlay */}
+                    <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between px-3 py-2 rounded-xl bg-slate-900/85 backdrop-blur-md border border-slate-700/50">
+                      <div className="flex gap-2">
+                        <span className="w-2 h-2 rounded-full bg-red-500/80" />
+                        <span className="w-2 h-2 rounded-full bg-yellow-500/80" />
+                        <span className="w-2 h-2 rounded-full bg-green-500/80" />
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[8px] font-bold font-mono text-emerald-400 tracking-wider uppercase mr-1">voice feed</span>
+                        <div className="flex items-end gap-0.5 h-3">
+                          <div className="w-0.5 bg-emerald-400 rounded-full animate-bounce h-2" style={{ animationDelay: "0.1s" }} />
+                          <div className="w-0.5 bg-emerald-400 rounded-full animate-bounce h-3" style={{ animationDelay: "0.3s" }} />
+                          <div className="w-0.5 bg-emerald-400 rounded-full animate-bounce h-1.5" style={{ animationDelay: "0.5s" }} />
+                          <div className="w-0.5 bg-emerald-400 rounded-full animate-bounce h-2.5" style={{ animationDelay: "0.2s" }} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-              {/* Status Indicators footer */}
-              <div className="flex justify-between items-center px-2">
-                <span className="text-[10px] text-slate-400">
-                  {currentAnswer.length} characters
-                </span>
-                <AnimatePresence>
-                  {saving && (
-                    <motion.span
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="text-[9px] text-emerald-600 font-semibold flex items-center gap-1"
-                    >
-                      <Save size={10} className="animate-pulse" /> Progress Saving...
-                    </motion.span>
-                  )}
-                </AnimatePresence>
+                  {/* Question Text Section */}
+                  <div className="lg:col-span-8 flex flex-col justify-center gap-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest leading-none">
+                        Question {activeIndex + 1} of {interview.questions.length}
+                      </span>
+                      
+                      {/* Audio Controls */}
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setIsSpeechEnabled(!isSpeechEnabled)}
+                          className={`p-1.5 rounded-lg border transition-all cursor-pointer ${
+                            isSpeechEnabled
+                              ? "bg-emerald-50 border-emerald-100 text-emerald-600 hover:bg-emerald-100"
+                              : "bg-slate-100 border-slate-200 text-slate-400 hover:bg-slate-200"
+                          }`}
+                          title={isSpeechEnabled ? "Mute AI speech" : "Unmute AI speech"}
+                          aria-label={isSpeechEnabled ? "Mute AI speech" : "Unmute AI speech"}
+                        >
+                          {isSpeechEnabled ? <Volume2 size={13} /> : <VolumeX size={13} />}
+                        </button>
+                        <button
+                          onClick={() => speakQuestion(currentQ.questionText)}
+                          className="p-1.5 rounded-lg border bg-white border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-700 cursor-pointer"
+                          title="Replay question audio"
+                          aria-label="Replay question audio"
+                        >
+                          <Play size={13} fill="currentColor" />
+                        </button>
+                      </div>
+                    </div>
+                    <h2 className="text-base md:text-lg font-bold text-slate-800 leading-relaxed text-wrap-balance">
+                      {currentQ.questionText}
+                    </h2>
+                  </div>
+                </div>
+
+                {/* Answer Input */}
+                <div className="space-y-2 relative">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wide px-1">Your Response</label>
+                  <div className="relative">
+                    <textarea
+                      value={currentAnswer}
+                      onChange={handleTextChange}
+                      placeholder="Type your response here… e.g. In my last project, we optimized database load by implementing a Redis cache layer which reduced latency by 40%…"
+                      className="w-full min-h-[220px] bg-slate-50/50 border border-slate-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 focus:bg-white rounded-3xl p-6 pr-16 text-sm outline-none transition-all duration-300 text-slate-800 leading-relaxed resize-none shadow-inner"
+                    />
+
+                    {/* Mic floating button */}
+                    <div className="absolute bottom-6 right-6 z-10 flex items-center gap-2">
+                      <AnimatePresence>
+                        {isListening && (
+                          <motion.span
+                            initial={{ opacity: 0, x: 5 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 5 }}
+                            className="text-[10px] font-bold text-red-500 bg-red-50 border border-red-100 px-2.5 py-1 rounded-full shadow-sm"
+                          >
+                            Listening…
+                          </motion.span>
+                        )}
+                      </AnimatePresence>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={toggleListening}
+                        type="button"
+                        className={`p-3 rounded-full border-2 transition-all cursor-pointer shadow-md ${
+                          isListening
+                            ? "bg-red-500 border-red-600 text-white shadow-red-500/20"
+                            : "bg-white border-slate-200 text-slate-500 hover:border-slate-350 hover:text-slate-850"
+                        }`}
+                        title={isListening ? "Stop voice answer" : "Speak your answer"}
+                        aria-label={isListening ? "Stop voice answer" : "Speak your answer"}
+                      >
+                        {isListening ? <MicOff size={16} /> : <Mic size={16} />}
+                      </motion.button>
+                    </div>
+                  </div>
+
+                  {/* Status Indicators footer */}
+                  <div className="flex justify-between items-center px-2">
+                    <span className="text-[10px] text-slate-400 font-medium">
+                      {currentAnswer.length} characters
+                    </span>
+                    <AnimatePresence>
+                      {saving && (
+                        <motion.span
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1"
+                        >
+                          <Save size={10} className="animate-pulse" /> Saving…
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </AnimatePresence>
 
           {/* Navigation Controls */}
           <div className="flex items-center justify-between border-t border-slate-100 pt-6 mt-6">
-            <button
+            <motion.button
+              whileHover={{ scale: 1.03, x: -2 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => handleNavigate(activeIndex - 1)}
               disabled={activeIndex === 0}
               className="px-5 py-3 rounded-2xl border border-slate-200 text-slate-500 hover:text-slate-800 hover:border-slate-300 disabled:opacity-30 disabled:hover:text-slate-500 disabled:hover:border-slate-200 transition flex items-center gap-1.5 text-xs font-semibold cursor-pointer"
             >
               <ArrowLeft size={14} /> Previous
-            </button>
+            </motion.button>
 
             {activeIndex === interview.questions.length - 1 ? (
-              <button
+              <motion.button
+                whileHover={{ scale: 1.03, shadow: "0 10px 25px -5px rgba(16, 185, 129, 0.3)" }}
+                whileTap={{ scale: 0.98 }}
                 onClick={handleEndInterview}
                 className="bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold px-6 py-3 rounded-2xl transition flex items-center gap-1.5 shadow-lg shadow-emerald-500/10 text-xs cursor-pointer"
               >
                 Submit & End Interview <Send size={13} />
-              </button>
+              </motion.button>
             ) : (
               <div className="flex gap-2">
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => handleNavigate(activeIndex + 1)}
                   className="px-5 py-3 rounded-2xl border border-slate-200 text-slate-500 hover:text-slate-800 hover:border-slate-300 transition text-xs font-semibold cursor-pointer"
                 >
                   Skip Question
-                </button>
-                <button
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.03, x: 2 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => handleNavigate(activeIndex + 1)}
                   className="bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold px-5 py-3 rounded-2xl transition flex items-center gap-1.5 shadow-lg shadow-emerald-500/10 text-xs cursor-pointer"
                 >
                   Next Question <ArrowRight size={14} />
-                </button>
+                </motion.button>
               </div>
             )}
           </div>

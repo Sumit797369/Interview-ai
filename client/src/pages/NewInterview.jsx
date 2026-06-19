@@ -27,8 +27,27 @@ const NewInterview = () => {
   const [type, setType] = useState("technical");
   const [difficulty, setDifficulty] = useState("intermediate");
   const [length, setLength] = useState(5);
+  const [interviewerGender, setInterviewerGender] = useState("female");
 
   const [generating, setGenerating] = useState(false);
+
+  const containerVariants = {
+    hidden: { opacity: 0, y: 15 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        staggerChildren: 0.08,
+        duration: 0.5,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 12 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+  };
 
   useEffect(() => {
     const fetchLatest = async () => {
@@ -64,6 +83,7 @@ const NewInterview = () => {
         type,
         difficulty,
         length,
+        interviewerGender,
       });
 
       // Deduct credit in current user state locally
@@ -115,7 +135,12 @@ const NewInterview = () => {
   }
 
   return (
-    <div className="space-y-8 relative">
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className="space-y-8 relative"
+    >
       <AnimatePresence>
         {generating && (
           // Fullscreen loader overlay
@@ -140,15 +165,18 @@ const NewInterview = () => {
       </AnimatePresence>
 
       {/* Header */}
-      <div>
+      <motion.div variants={itemVariants}>
         <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight">New Practice Session</h1>
         <p className="text-sm text-gray-500 mt-1">
           Select your settings. 1 credit will be deducted from your account.
         </p>
-      </div>
+      </motion.div>
 
       {/* Active Resume Context Card */}
-      <div className="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm flex items-center justify-between gap-4">
+      <motion.div
+        variants={itemVariants}
+        className="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm flex items-center justify-between gap-4"
+      >
         <div className="flex items-center gap-3">
           <div className="bg-emerald-50 border border-emerald-100 text-emerald-600 p-2.5 rounded-xl">
             <Sliders size={20} />
@@ -161,156 +189,264 @@ const NewInterview = () => {
         <span className="text-[10px] font-bold bg-slate-100 border border-slate-200 text-slate-500 px-3 py-1 rounded-xl">
           {resume.analysis.experienceLevel} Level
         </span>
-      </div>
+      </motion.div>
 
       {/* Selector Grid */}
-      <div className="space-y-6">
+      <motion.div variants={itemVariants} className="space-y-8">
         {/* Row 1: Category */}
         <div className="space-y-3">
-          <label className="text-sm font-bold text-slate-400 tracking-wide uppercase">Select Category</label>
+          <label className="text-xs font-bold text-slate-400 tracking-wider uppercase">Select Category</label>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {/* Tech */}
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => setType("technical")}
-              className={`p-5 rounded-3xl border text-left transition-all duration-300 relative overflow-hidden group cursor-pointer ${
+              className={`p-6 rounded-3xl border-2 text-left transition-all duration-300 relative overflow-hidden group cursor-pointer flex flex-col justify-between h-full ${
                 type === "technical"
-                  ? "bg-emerald-50 border-emerald-500 text-slate-800 shadow-md"
-                  : "bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-850"
+                  ? "bg-gradient-to-br from-emerald-50 to-teal-50/20 border-emerald-500 text-slate-850 shadow-[0_0_20px_rgba(16,185,129,0.1)]"
+                  : "bg-white border-slate-200 text-slate-500 hover:border-slate-350 hover:text-slate-800"
               }`}
             >
-              <h4 className="text-base font-bold leading-tight">Technical</h4>
-              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+              {type === "technical" && (
+                <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              )}
+              <h4 className="text-base font-bold leading-tight text-slate-800">Technical</h4>
+              <p className="text-xs text-slate-400 mt-2 leading-relaxed">
                 Coding, architectural strategies, system design, and tech stacks.
               </p>
-            </button>
+            </motion.button>
 
             {/* HR */}
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => setType("hr")}
-              className={`p-5 rounded-3xl border text-left transition-all duration-300 relative overflow-hidden group cursor-pointer ${
+              className={`p-6 rounded-3xl border-2 text-left transition-all duration-300 relative overflow-hidden group cursor-pointer flex flex-col justify-between h-full ${
                 type === "hr"
-                  ? "bg-emerald-50 border-emerald-500 text-slate-800 shadow-md"
-                  : "bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-855"
+                  ? "bg-gradient-to-br from-emerald-50 to-teal-50/20 border-emerald-500 text-slate-850 shadow-[0_0_20px_rgba(16,185,129,0.1)]"
+                  : "bg-white border-slate-200 text-slate-500 hover:border-slate-350 hover:text-slate-800"
               }`}
             >
-              <h4 className="text-base font-bold leading-tight">Behavioral / HR</h4>
-              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+              {type === "hr" && (
+                <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              )}
+              <h4 className="text-base font-bold leading-tight text-slate-800">Behavioral / HR</h4>
+              <p className="text-xs text-slate-400 mt-2 leading-relaxed">
                 Situational queries, situational management, and alignment answers.
               </p>
-            </button>
+            </motion.button>
 
             {/* Mixed */}
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => setType("mixed")}
-              className={`p-5 rounded-3xl border text-left transition-all duration-300 relative overflow-hidden group cursor-pointer ${
+              className={`p-6 rounded-3xl border-2 text-left transition-all duration-300 relative overflow-hidden group cursor-pointer flex flex-col justify-between h-full ${
                 type === "mixed"
-                  ? "bg-emerald-50 border-emerald-500 text-slate-800 shadow-md"
-                  : "bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-850"
+                  ? "bg-gradient-to-br from-emerald-50 to-teal-50/20 border-emerald-500 text-slate-850 shadow-[0_0_20px_rgba(16,185,129,0.1)]"
+                  : "bg-white border-slate-200 text-slate-500 hover:border-slate-355 hover:text-slate-800"
               }`}
             >
-              <h4 className="text-base font-bold leading-tight">Mixed Round</h4>
-              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+              {type === "mixed" && (
+                <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              )}
+              <h4 className="text-base font-bold leading-tight text-slate-800">Mixed Round</h4>
+              <p className="text-xs text-slate-400 mt-2 leading-relaxed">
                 A combination of both engineering skills and cultural fit.
               </p>
-            </button>
+            </motion.button>
           </div>
         </div>
 
         {/* Row 2: Difficulty */}
         <div className="space-y-3">
-          <label className="text-sm font-bold text-slate-400 tracking-wide uppercase">Select Difficulty</label>
+          <label className="text-xs font-bold text-slate-400 tracking-wider uppercase">Select Difficulty</label>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {/* Beginner */}
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => setDifficulty("beginner")}
-              className={`p-5 rounded-3xl border text-left transition-all duration-300 cursor-pointer ${
+              className={`p-6 rounded-3xl border-2 text-left transition-all duration-300 relative cursor-pointer flex flex-col justify-between h-full ${
                 difficulty === "beginner"
-                  ? "bg-emerald-50 border-emerald-500 text-slate-800 shadow-md"
-                  : "bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-850"
+                  ? "bg-gradient-to-br from-emerald-50 to-teal-50/20 border-emerald-500 text-slate-850 shadow-[0_0_20px_rgba(16,185,129,0.1)]"
+                  : "bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-800"
               }`}
             >
-              <h4 className="text-base font-bold leading-tight">Beginner</h4>
-              <p className="text-xs text-slate-400 mt-1">Core fundamentals, terms, and basic syntax details.</p>
-            </button>
+              {difficulty === "beginner" && (
+                <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              )}
+              <h4 className="text-base font-bold leading-tight text-slate-800">Beginner</h4>
+              <p className="text-xs text-slate-400 mt-2">Core fundamentals, terms, and basic syntax details.</p>
+            </motion.button>
 
             {/* Intermediate */}
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => setDifficulty("intermediate")}
-              className={`p-5 rounded-3xl border text-left transition-all duration-300 cursor-pointer ${
+              className={`p-6 rounded-3xl border-2 text-left transition-all duration-300 relative cursor-pointer flex flex-col justify-between h-full ${
                 difficulty === "intermediate"
-                  ? "bg-emerald-50 border-emerald-500 text-slate-800 shadow-md"
-                  : "bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-850"
+                  ? "bg-gradient-to-br from-emerald-50 to-teal-50/20 border-emerald-500 text-slate-855 shadow-[0_0_20px_rgba(16,185,129,0.1)]"
+                  : "bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-800"
               }`}
             >
-              <h4 className="text-base font-bold leading-tight">Intermediate</h4>
-              <p className="text-xs text-slate-400 mt-1">Component architecture, API setups, and problem handling.</p>
-            </button>
+              {difficulty === "intermediate" && (
+                <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              )}
+              <h4 className="text-base font-bold leading-tight text-slate-800">Intermediate</h4>
+              <p className="text-xs text-slate-400 mt-2">Component architecture, API setups, and problem handling.</p>
+            </motion.button>
 
             {/* Advanced */}
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => setDifficulty("advanced")}
-              className={`p-5 rounded-3xl border text-left transition-all duration-300 cursor-pointer ${
+              className={`p-6 rounded-3xl border-2 text-left transition-all duration-300 relative cursor-pointer flex flex-col justify-between h-full ${
                 difficulty === "advanced"
-                  ? "bg-emerald-50 border-emerald-500 text-slate-800 shadow-md"
-                  : "bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-850"
+                  ? "bg-gradient-to-br from-emerald-50 to-teal-50/20 border-emerald-500 text-slate-850 shadow-[0_0_20px_rgba(16,185,129,0.1)]"
+                  : "bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-800"
               }`}
             >
-              <h4 className="text-base font-bold leading-tight">Advanced</h4>
-              <p className="text-xs text-slate-400 mt-1">System bottlenecks, caching scaling, and design patterns.</p>
-            </button>
+              {difficulty === "advanced" && (
+                <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              )}
+              <h4 className="text-base font-bold leading-tight text-slate-800">Advanced</h4>
+              <p className="text-xs text-slate-400 mt-2">System bottlenecks, caching scaling, and design patterns.</p>
+            </motion.button>
           </div>
         </div>
 
-        {/* Row 3: Length */}
+        {/* Row 3: AI Interviewer */}
         <div className="space-y-3">
-          <label className="text-sm font-bold text-slate-400 tracking-wide uppercase">Select Interview Length</label>
+          <label className="text-xs font-bold text-slate-400 tracking-wider uppercase">Select AI Interviewer</label>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Female AI (Sophia) */}
+            <motion.button
+              whileHover={{ scale: 1.015, y: -2 }}
+              whileTap={{ scale: 0.985 }}
+              onClick={() => setInterviewerGender("female")}
+              className={`p-6 rounded-3xl border-2 text-left transition-all duration-300 relative overflow-hidden group cursor-pointer ${
+                interviewerGender === "female"
+                  ? "bg-gradient-to-br from-emerald-50 to-teal-50/20 border-emerald-500 text-slate-850 shadow-[0_0_20px_rgba(16,185,129,0.1)]"
+                  : "bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-800"
+              }`}
+            >
+              {interviewerGender === "female" && (
+                <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              )}
+              <div className="flex items-start gap-4">
+                <div className={`p-3 rounded-2xl shrink-0 ${interviewerGender === "female" ? "bg-emerald-500 text-white shadow-md shadow-emerald-550/20" : "bg-slate-100 text-slate-550"}`}>
+                  <Bot size={24} />
+                </div>
+                <div>
+                  <h4 className="text-base font-bold leading-tight text-slate-800">Sophia (Female AI)</h4>
+                  <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                    Professional, highly engaging, and clear. Best for general communication, technical basics, and behavioral response reviews.
+                  </p>
+                </div>
+              </div>
+            </motion.button>
+
+            {/* Male AI (David) */}
+            <motion.button
+              whileHover={{ scale: 1.015, y: -2 }}
+              whileTap={{ scale: 0.985 }}
+              onClick={() => setInterviewerGender("male")}
+              className={`p-6 rounded-3xl border-2 text-left transition-all duration-300 relative overflow-hidden group cursor-pointer ${
+                interviewerGender === "male"
+                  ? "bg-gradient-to-br from-emerald-50 to-teal-50/20 border-emerald-500 text-slate-850 shadow-[0_0_20px_rgba(16,185,129,0.1)]"
+                  : "bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-800"
+              }`}
+            >
+              {interviewerGender === "male" && (
+                <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              )}
+              <div className="flex items-start gap-4">
+                <div className={`p-3 rounded-2xl shrink-0 ${interviewerGender === "male" ? "bg-emerald-500 text-white shadow-md shadow-emerald-550/20" : "bg-slate-100 text-slate-550"}`}>
+                  <Sparkles size={24} />
+                </div>
+                <div>
+                  <h4 className="text-base font-bold leading-tight text-slate-800">David (Male AI)</h4>
+                  <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                    Structured, analytical, and precise. Best for digging deep into system architectures, syntax logic, and engineering trade-offs.
+                  </p>
+                </div>
+              </div>
+            </motion.button>
+          </div>
+        </div>
+
+        {/* Row 4: Length */}
+        <div className="space-y-3">
+          <label className="text-xs font-bold text-slate-400 tracking-wider uppercase">Select Interview Length</label>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {/* 5 Questions */}
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => setLength(5)}
-              className={`p-5 rounded-3xl border text-left transition-all duration-300 cursor-pointer ${
+              className={`p-6 rounded-3xl border-2 text-left transition-all duration-300 relative cursor-pointer flex flex-col justify-between h-full ${
                 length === 5
-                  ? "bg-emerald-50 border-emerald-500 text-slate-800 shadow-md"
-                  : "bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-850"
+                  ? "bg-gradient-to-br from-emerald-50 to-teal-50/20 border-emerald-500 text-slate-850 shadow-[0_0_20px_rgba(16,185,129,0.1)]"
+                  : "bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-800"
               }`}
             >
-              <h4 className="text-base font-bold leading-tight">Quick (5 Questions)</h4>
-              <p className="text-xs text-slate-400 mt-1">Estimated duration: ~10 minutes. Fast practice.</p>
-            </button>
+              {length === 5 && (
+                <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              )}
+              <h4 className="text-base font-bold leading-tight text-slate-800">Quick (5 Questions)</h4>
+              <p className="text-xs text-slate-400 mt-2">Estimated duration: ~10 minutes. Fast practice.</p>
+            </motion.button>
 
             {/* 10 Questions */}
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => setLength(10)}
-              className={`p-5 rounded-3xl border text-left transition-all duration-300 cursor-pointer ${
+              className={`p-6 rounded-3xl border-2 text-left transition-all duration-300 relative cursor-pointer flex flex-col justify-between h-full ${
                 length === 10
-                  ? "bg-emerald-50 border-emerald-500 text-slate-800 shadow-md"
+                  ? "bg-gradient-to-br from-emerald-50 to-teal-50/20 border-emerald-500 text-slate-850 shadow-[0_0_20px_rgba(16,185,129,0.1)]"
                   : "bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-850"
               }`}
             >
-              <h4 className="text-base font-bold leading-tight">Standard (10 Questions)</h4>
-              <p className="text-xs text-slate-400 mt-1">Estimated duration: ~20 minutes. Regular round.</p>
-            </button>
+              {length === 10 && (
+                <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              )}
+              <h4 className="text-base font-bold leading-tight text-slate-800">Standard (10 Questions)</h4>
+              <p className="text-xs text-slate-400 mt-2">Estimated duration: ~20 minutes. Regular round.</p>
+            </motion.button>
 
             {/* 20 Questions */}
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => setLength(20)}
-              className={`p-5 rounded-3xl border text-left transition-all duration-300 cursor-pointer ${
+              className={`p-6 rounded-3xl border-2 text-left transition-all duration-300 relative cursor-pointer flex flex-col justify-between h-full ${
                 length === 20
-                  ? "bg-emerald-50 border-emerald-500 text-slate-800 shadow-md"
+                  ? "bg-gradient-to-br from-emerald-50 to-teal-50/20 border-emerald-500 text-slate-850 shadow-[0_0_20px_rgba(16,185,129,0.1)]"
                   : "bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-850"
               }`}
             >
-              <h4 className="text-base font-bold leading-tight">Deep Dive (20 Questions)</h4>
-              <p className="text-xs text-slate-400 mt-1">Estimated duration: ~40 minutes. Full grilling.</p>
-            </button>
+              {length === 20 && (
+                <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              )}
+              <h4 className="text-base font-bold leading-tight text-slate-800">Deep Dive (20 Questions)</h4>
+              <p className="text-xs text-slate-400 mt-2">Estimated duration: ~40 minutes. Full grilling.</p>
+            </motion.button>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Credit check and launch banner */}
-      <div className="bg-white border border-slate-200 rounded-[32px] p-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+      <motion.div
+        variants={itemVariants}
+        className="bg-white border border-slate-200 rounded-[32px] p-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm"
+      >
         <div className="flex items-center gap-3.5">
-          <div className="bg-amber-50 border border-amber-100 text-amber-600 p-3 rounded-2xl">
+          <div className="bg-amber-50 border border-amber-100 text-amber-650 p-3 rounded-2xl">
             <Coins size={22} />
           </div>
           <div>
@@ -329,15 +465,17 @@ const NewInterview = () => {
             Upgrade Plan
           </Link>
         ) : (
-          <button
+          <motion.button
+            whileHover={{ scale: 1.03, shadow: "0 10px 25px -5px rgba(16, 185, 129, 0.3)" }}
+            whileTap={{ scale: 0.98 }}
             onClick={handleStart}
             className="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold px-6 py-3.5 rounded-2xl transition flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/15 text-sm cursor-pointer"
           >
             Deduct 1 Credit & Start <ChevronRight size={16} />
-          </button>
+          </motion.button>
         )}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
