@@ -23,10 +23,10 @@ email:{
     enum: ["google", "local"],
     default: "local",
   },
-  credits:{
-    type: String,
-    default:100
-},
+  credits: {
+    type: Number,
+    default: 5,
+  },
 
 
 }, {timestamps:true})

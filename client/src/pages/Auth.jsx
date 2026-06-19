@@ -1,20 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { LiaRobotSolid } from "react-icons/lia";
 import { FcGoogle } from "react-icons/fc";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { motion } from "motion/react";
-import { toast } from "react-toastify";
-
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import { auth, provider } from "../../firebase";
-
-import {
-  signInWithPopup,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  updateProfile,
-} from "firebase/auth";
+import { signInWithPopup } from "firebase/auth";
 
 const Auth = () => {
+  const { user, login, register, googleLogin } = useAuth();
+  const navigate = useNavigate();
+
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -26,6 +23,13 @@ const Auth = () => {
 
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -42,40 +46,15 @@ const Auth = () => {
       setErrorMsg("");
 
       if (isLogin) {
-        // LOGIN
-        const result = await signInWithEmailAndPassword(
-          auth,
-          formData.email,
-          formData.password
-        );
-
-        console.log(result.user);
-
-        toast.success(
-          `Welcome back ${
-            result.user.displayName || result.user.email
-          }`
-        );
+        // Express Backend LOGIN
+        await login(formData.email, formData.password);
+        navigate("/");
       } else {
-        // SIGNUP
-        const result = await createUserWithEmailAndPassword(
-          auth,
-          formData.email,
-          formData.password
-        );
+        // Express Backend SIGNUP
+        await register(formData.username, formData.email, formData.password);
 
-        // Username Firebase profile mein save hoga
-        await updateProfile(result.user, {
-          displayName: formData.username,
-        });
-
-        console.log(result.user);
-
-        toast.success("Account Created Successfully!");
-
-        // Signup ke baad login mode pe le jao
+        // Switch to login mode
         setIsLogin(true);
-
         setFormData({
           username: "",
           email: "",
@@ -84,40 +63,7 @@ const Auth = () => {
       }
     } catch (error) {
       console.log(error);
-
-      let message = "Something went wrong";
-
-      switch (error.code) {
-        case "auth/email-already-in-use":
-          message = "Email already exists";
-          break;
-
-        case "auth/invalid-email":
-          message = "Invalid email address";
-          break;
-
-        case "auth/weak-password":
-          message = "Password should be at least 6 characters";
-          break;
-
-        case "auth/invalid-credential":
-          message = "Invalid email or password";
-          break;
-
-        case "auth/user-not-found":
-          message = "User not found";
-          break;
-
-        case "auth/wrong-password":
-          message = "Incorrect password";
-          break;
-
-        default:
-          message = error.message;
-      }
-
-      setErrorMsg(message);
-      toast.error(message);
+      setErrorMsg(error.message || "Authentication failed");
     } finally {
       setLoading(false);
     }
@@ -125,20 +71,20 @@ const Auth = () => {
 
   const handleGoogleAuth = async () => {
     try {
+      setLoading(true);
       setErrorMsg("");
 
+      // Firebase Popup for OAuth
       const result = await signInWithPopup(auth, provider);
 
-      console.log(result.user);
-
-      toast.success(
-        `Welcome ${result.user.displayName || result.user.email}`
-      );
+      // Send Google credentials to Express Backend
+      await googleLogin(result.user);
+      navigate("/");
     } catch (error) {
       console.log(error);
-
-      setErrorMsg(error.message);
-      toast.error(error.message);
+      setErrorMsg(error.message || "Google Authentication failed");
+    } finally {
+      setLoading(false);
     }
   };
 
